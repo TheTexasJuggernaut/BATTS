@@ -10,6 +10,8 @@ using Android.Runtime;
 using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
+using System.IO;
+using SQLite;
 
 namespace BATTS.Droid
 {
@@ -21,6 +23,10 @@ namespace BATTS.Droid
         EditText password;
         private string newUserEmail;
         private string newUserPass;
+
+        //Shawn Database Add https://www.youtube.com/watch?v=wtpm8OPHx5Q&feature=emb_logo
+        string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "dbTest.db3");
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -34,6 +40,20 @@ namespace BATTS.Droid
 
             buttonReg.Click += DoRegister;
             button.Click += DoLogin;
+
+            
+            //Conection
+            var db = new SQLiteConnection(dbPath);
+            //Setup at able
+            db.CreateTable<UserData>();
+
+            ////Create a new contact Object 
+            //UserData myData = new UserData("Shawn", "281-513-8574");
+            
+
+
+
+
 
         }
         public void DoLogin(object sender, EventArgs e)
@@ -55,6 +75,20 @@ namespace BATTS.Droid
 
             newUserEmail = email.Text;
             newUserPass = password.Text;
+            //Create a new contact Object 
+            UserData myData = new UserData(newUserEmail, newUserPass);
+
+
+            var db = new SQLiteConnection(dbPath);
+            var table = db.Table<UserData>();
+           
+            foreach (var item in table)
+            {
+                UserData myUser = new UserData(item.Name, item.PhoneNumber);
+                
+                
+            }
+            
             Toast.MakeText(this, "New User Registered. Please Login!", ToastLength.Long).Show();
         }
     }

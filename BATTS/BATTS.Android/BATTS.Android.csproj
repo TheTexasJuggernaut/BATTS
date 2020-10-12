@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Connected Services\BATSSMobileApp\ConnectedService.json" />
+    <None Include="Connected Services\BATSSDBMobileApp\ConnectedService.json" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
