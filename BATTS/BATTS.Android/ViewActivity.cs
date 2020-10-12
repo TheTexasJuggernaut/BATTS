@@ -32,11 +32,15 @@ namespace BATTS.Droid
         {
 
             SetContentView(Resource.Layout.ViewTeams);
+            var buttonAddTeam = FindViewById<Button>(Resource.Id.AddTeam);
+
+            var buttonTeam = FindViewById<Button>(Resource.Id.btviewteams1);
+
 
         }
         public void DoTutorial(object sender, EventArgs e)
         {
-            Toast.MakeText(this, "Please View the manual for a a tuturoial on the BATSS App", ToastLength.Long).Show();
+            Toast.MakeText(this, "Please View the manual for a a tutorial on the BATSS App", ToastLength.Long).Show();
             SetContentView(Resource.Layout.Tutorial);
         }
     }

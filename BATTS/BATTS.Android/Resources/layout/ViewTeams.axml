@@ -17,7 +17,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_margin="30dp">
-
+                <Button
+                    android:text="Add Team"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/AddTeam" />
                 <Button
                     android:text="Team 1"
                     android:layout_width="match_parent"
