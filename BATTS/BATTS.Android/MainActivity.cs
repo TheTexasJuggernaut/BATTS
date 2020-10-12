@@ -8,6 +8,8 @@ using Android.Widget;
 using Android.OS;
 using Android.Support.V7.App;
 using BATTS.Views;
+using System.IO;
+using SQLite;
 
 namespace BATTS.Droid
 {
@@ -26,6 +28,11 @@ namespace BATTS.Droid
 
             // This MobileServiceClient has been configured to communicate with the Azure Mobile App and
             // Azure Gateway using the application url. You're all set to start working with your Mobile App!
+            Microsoft.WindowsAzure.MobileServices.MobileServiceClient BATSSClient = new Microsoft.WindowsAzure.MobileServices.MobileServiceClient(
+            "https://batss.azurewebsites.net");
+
+            // This MobileServiceClient has been configured to communicate with the Azure Mobile App and
+            // Azure Gateway using the application url. You're all set to start working with your Mobile App!
             Microsoft.WindowsAzure.MobileServices.MobileServiceClient website20201011091435Client = new Microsoft.WindowsAzure.MobileServices.MobileServiceClient(
             "https://website20201011091435.azurewebsites.net");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -33,6 +40,27 @@ namespace BATTS.Droid
 
             StartActivity(typeof(LoginActivity));
             //StartActivity(typeof(ViewTeams));
+
+            //Shawn Database Add https://www.youtube.com/watch?v=wtpm8OPHx5Q&feature=emb_logo
+            string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "dbTest.db3");
+
+            //Conection
+            var db = new SQLiteConnection(dbPath);
+            //Setup at able
+            db.CreateTable<UserData>();
+
+            ////Create a new contact Object 
+            //UserData myData = new UserData("Shawn", "281-513-8574");
+            ////var db = new SQLiteConnection(dbPath);
+            //var table = db.Table<UserData>();
+
+            //foreach (var item in table)
+            //{
+            //    UserData myUser = new UserData(item.Name, item.PhoneNumber);
+
+
+            //}
+
         }
 
         
