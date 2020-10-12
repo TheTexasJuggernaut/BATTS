@@ -23,6 +23,11 @@ namespace BATTS.Droid
             LoginPageResource = Resource.Layout.Login;
 
             base.OnCreate(savedInstanceState);
+
+            // This MobileServiceClient has been configured to communicate with the Azure Mobile App and
+            // Azure Gateway using the application url. You're all set to start working with your Mobile App!
+            Microsoft.WindowsAzure.MobileServices.MobileServiceClient website20201011091435Client = new Microsoft.WindowsAzure.MobileServices.MobileServiceClient(
+            "https://website20201011091435.azurewebsites.net");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
