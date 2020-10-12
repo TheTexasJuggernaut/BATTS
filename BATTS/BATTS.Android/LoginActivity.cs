@@ -13,6 +13,7 @@ using Android.Widget;
 
 namespace BATTS.Droid
 {
+    //Reviewed 
     [Activity(Label = "LoginActivity")]
     public class LoginActivity : Activity
     {
