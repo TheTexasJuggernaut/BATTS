@@ -13,6 +13,7 @@ using Android.Widget;
 using System.IO;
 using SQLite;
 using BATTS.Droid.DataServices;
+using BATTS.Droid.DataModel;
 
 namespace BATTS.Droid
 {
