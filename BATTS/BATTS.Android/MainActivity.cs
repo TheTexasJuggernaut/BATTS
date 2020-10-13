@@ -18,6 +18,7 @@ namespace BATTS.Droid
     {
         public int LoginPageResource { get; private set; }
 
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -42,6 +43,10 @@ namespace BATTS.Droid
             "https://website20201011091435.azurewebsites.net");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
+
+            //Shawn Added Mobile Back End
+            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+            //SQLitePCL.CurrentPlatform.Init();
 
             StartActivity(typeof(LoginActivity));
             //StartActivity(typeof(ViewTeams));

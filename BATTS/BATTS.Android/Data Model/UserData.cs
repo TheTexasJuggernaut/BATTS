@@ -10,16 +10,19 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace BATTS.Droid
+
+namespace BATTS.Droid.DataModel
 {
+
     class UserData
     {
-        private string name;
-        private string phonenumber;
+        [Newtonsoft.Json.JsonProperty("Id")]
+        public string name;
+        public string phonenumber;
 
         public string Name { get; set; }
-
         public string PhoneNumber { get; set; }
+
         public UserData()
         {
 
