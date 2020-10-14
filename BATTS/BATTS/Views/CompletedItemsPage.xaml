@@ -8,11 +8,31 @@
             <Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+            <TableView Intent="Form">
+                <TableRoot>
+                    <TableSection Title="Basic Info">
+                        <EntryCell Label="Name" Text="{Binding Item.Name}"/>
+                        <EntryCell Label="Category" Text="{Binding Item.Category}" IsEnabled="{Binding IsNew}" />
+                        <SwitchCell Text="Is Complete" On="{Binding Item.Completed}"/>
+                    </TableSection>
+                    <TableSection Title="Details">
+                        <ViewCell>
+                            <StackLayout HeightRequest="200">
+                               <!-- <Editor Text="{Binding Item.Description}" HeightRequest="200" MinimumHeightRequest="200" /> -->
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
             <StackLayout>
                 <Label Text="{Binding Item.Name, StringFormat='Task Name: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
                 <Label Text="{Binding Item.Category, StringFormat='Category: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
                 <Label Text="{Binding Item.Description}" FontSize="Small"/>
-            </StackLayout>
+                </StackLayout>
         </StackLayout>
     </ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+        <ToolbarItem Text="Cancel" Clicked="Handle_CancelClicked" />
+    </ContentPage.ToolbarItems>
 </ContentPage>

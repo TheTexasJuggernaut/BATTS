@@ -20,8 +20,8 @@ namespace BATTS.Services
     {
         static DocumentClient docClient = null;
 
-        static readonly string databaseName = "Tasks";
-        static readonly string collectionName = "Items";
+        static readonly string databaseName = "UserRegistry";
+        static readonly string collectionName = "UserData";
 
         static async Task<bool> Initialize()
         {
@@ -56,9 +56,87 @@ namespace BATTS.Services
 
             return true;
         }
+        #region User Data Models
+        // <GetUserData>
 
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<UserDataModel>> GetUserData()
+        {
+            var items = new List<UserDataModel>();
+
+            if (!await Initialize())
+                return items;
+
+            var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.ActiveUser == true )
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<UserDataModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
+
+
+        // <InsertUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task InsertUserData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            await docClient.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
+                item);
+        }
+        // </InsertToDoItem>  
+
+        // <DeleteUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task DeleteUserData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionName, item.Id);
+            await docClient.DeleteDocumentAsync(docUri);
+        }
+        // </DeleteToDoItem>  
+
+        // <UpdateUserItem>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task UpdateUserData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionName, item.Id);
+            await docClient.ReplaceDocumentAsync(docUri, item);
+        }
+        // </UpdateToDoItem>  
+
+
+        #endregion
+
+        #region Item Model Calls
         // <GetToDoItems>        
         /// <summary> 
+        /// Hi
         /// </summary>
         /// <returns></returns>
         public async static Task<List<Item>> GetItems()
@@ -88,6 +166,7 @@ namespace BATTS.Services
 
         // <GetCompletedToDoItems>        
         /// <summary> 
+        /// Sorts the list to find items that are completed
         /// </summary>
         /// <returns></returns>
         public async static Task<List<Item>> GetCompletedItems()
@@ -170,5 +249,6 @@ namespace BATTS.Services
             await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
+        #endregion
     }
 }

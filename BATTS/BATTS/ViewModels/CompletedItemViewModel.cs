@@ -10,15 +10,22 @@ namespace BATTS.ViewModels
 {
     public class CompletedItemViewModel : BaseViewModel
     {
-        List<Item> completedToDos;
-        public List<Item> CompletedToDos { get => completedToDos; set => SetProperty(ref completedToDos, value); }
+        List<UserDataModel> completedToDos; //Update tags 
+        public List<UserDataModel> CompletedToDos { get => completedToDos; set => SetProperty(ref completedToDos, value); }
 
         public ICommand RefreshCommand { get; }
 
-        public CompletedItemViewModel()
+        public CompletedItemViewModel(UserDataModel Item, bool isNew)
         {
             RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
-            Title = "Completed";
+            Title = "User Data";
+
+            IsNew = isNew;
+            Item = item;
+
+            SaveCommand = new Command(async () => await ExecuteSaveCommand());
+
+            Title = IsNew ? "New To Do" : item.FirstName;
         }
 
         async Task ExecuteRefreshCommand()
@@ -30,12 +37,47 @@ namespace BATTS.ViewModels
 
             try
             {
-                CompletedToDos = await AzuCosmoDBManager.GetCompletedItems();
+                CompletedToDos = await AzuCosmoDBManager.GetUserData();
             }
             finally
             {
                 IsBusy = false;
             }
+
+
+        }
+
+        bool isNew;
+        public bool IsNew
+        {
+            get => isNew;
+            set => SetProperty(ref isNew, value);
+        }
+
+
+        public UserDataModel item { get; set; }
+        public ICommand SaveCommand { get; }
+
+        public event EventHandler SaveComplete;
+
+        //public ItemDetailViewModel(Item Item, bool isNew)
+        //{
+        //    IsNew = isNew;
+        //    Item = item;
+
+        //    SaveCommand = new Command(async () => await ExecuteSaveCommand());
+
+        //    Title = IsNew ? "New To Do" : item.Name;
+        //}
+
+        async Task ExecuteSaveCommand()
+        {
+            if (IsNew)
+                await AzuCosmoDBManager.InsertUserData(item);
+            else
+                await AzuCosmoDBManager.UpdateUserData(item);
+
+            SaveComplete?.Invoke(this, new EventArgs());
         }
     }
 }
