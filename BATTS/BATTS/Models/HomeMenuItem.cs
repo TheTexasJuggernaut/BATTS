@@ -7,7 +7,8 @@ namespace BATTS.Models
     public enum MenuItemType
     {
         Browse,
-        About
+        About,
+        Complete
     }
     public class HomeMenuItem
     {

@@ -16,13 +16,15 @@ namespace BATTS.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel viewModel;
+
+        ItemsViewModel vm;
 
         public ItemsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = vm = new ItemsViewModel();
+            vm.Title = "To Do Items";
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -46,8 +48,31 @@ namespace BATTS.Views
         {
             base.OnAppearing();
 
-            if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+            if (vm.Items.Count == 0)
+            {
+                vm.RefreshCommand.Execute(null);
+                vm.LoadItemsCommand.Execute(null);
+            }
+        }
+
+        
+
+        protected async void listItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            var todoItem = e.SelectedItem as Item;
+
+            if (todoItem == null)
+                return;
+
+            await Navigation.PushAsync(new ItemDetailPage(todoItem, false));
+        }
+
+        protected async void AddNewClicked(object sender, EventArgs e)
+        {
+            var toDo = new Item();
+            var todoPage = new ItemDetailPage(toDo, true);
+
+            await Navigation.PushModalAsync(new NavigationPage(todoPage));
         }
     }
 }

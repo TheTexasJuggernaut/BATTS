@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BATTS.Views.CompletedItemsPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <Label Text="{Binding Item.Name, StringFormat='Task Name: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
+                <Label Text="{Binding Item.Category, StringFormat='Category: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
+                <Label Text="{Binding Item.Description}" FontSize="Small"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

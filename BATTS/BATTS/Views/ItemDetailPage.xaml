@@ -3,10 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BATTS.Views.ItemDetailPage"
              Title="{Binding Title}">
-    <StackLayout Spacing="20" Padding="15">
-        <Label Text="Text:" FontSize="Medium" />
+    <ContentPage.Content>
+        <StackLayout Spacing="20" Padding="15">
+       <!--<Label Text="Text:" FontSize="Medium" /> 
         <Label Text="{Binding Item.Text}" FontSize="Small"/>
         <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Item.Description}" FontSize="Small"/>
-    </StackLayout>
+        <Label Text="{Binding Item.Description}" FontSize="Small"/> -->
+            <TableView Intent="Form">
+                <TableRoot>
+                    <TableSection Title="Basic Info">
+                        <EntryCell Label="Name" Text="{Binding Item.Name}"/>
+                        <EntryCell Label="Category" Text="{Binding Item.Category}" IsEnabled="{Binding IsNew}" />
+                        <SwitchCell Text="Is Complete" On="{Binding Item.Completed}"/>
+                    </TableSection>
+                    <TableSection Title="Details">
+                        <ViewCell>
+                            <StackLayout HeightRequest="200">
+                               <!-- <Editor Text="{Binding Item.Description}" HeightRequest="200" MinimumHeightRequest="200" /> -->
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        </StackLayout>
+    </ContentPage.Content>
+    <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+    <ToolbarItem Text="Cancel" Clicked="Handle_CancelClicked" />
+    </ContentPage.ToolbarItems>
 </ContentPage>
