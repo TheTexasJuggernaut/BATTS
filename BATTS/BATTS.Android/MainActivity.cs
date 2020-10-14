@@ -10,6 +10,7 @@ using Android.Support.V7.App;
 using BATTS.Views;
 using System.IO;
 using SQLite;
+using BATTS.Droid.DataModel;
 
 namespace BATTS.Droid
 {
@@ -42,16 +43,13 @@ namespace BATTS.Droid
             Microsoft.WindowsAzure.MobileServices.MobileServiceClient website20201011091435Client = new Microsoft.WindowsAzure.MobileServices.MobileServiceClient(
             "https://website20201011091435.azurewebsites.net");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App());
-
-            //Shawn Added Mobile Back End
-            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
-            //SQLitePCL.CurrentPlatform.Init();
+            LoadApplication(new App());                    
 
             StartActivity(typeof(LoginActivity));
             //StartActivity(typeof(ViewTeams));
 
-           
+            
+
 
         }
 
