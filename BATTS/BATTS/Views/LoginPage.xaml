@@ -23,8 +23,7 @@
                        IsVisible="{Binding AreCredentialsInvalid}" 
                        TextColor="Red" />
             </StackLayout>
-            <Button Grid.Row="2" Text="Authenticate"  Command="{Binding AuthenticateCommand}" />
-            
+            <Button Grid.Row="2" Text="Authenticate" Command="{Binding AuthenticateCommand}" />            
         </Grid>
     </ContentPage.Content>
     <ContentPage.ToolbarItems>

@@ -21,9 +21,9 @@ namespace BATTS
 
             
             //Navigation to MainPage
-            MainPage = new MainPage();// --> Bypass
+            //MainPage = new MainPage();// --> Bypass
 
-            //MainPage = new LoginPage(); 
+            MainPage = new LoginPage(); 
         }
 
          protected override void OnStart()
