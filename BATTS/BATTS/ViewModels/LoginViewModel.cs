@@ -15,6 +15,7 @@ namespace BATTS.ViewModels
     {
         public ObservableCollection<UserDataModel> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
+        
 
 
         List<UserDataModel> todoItems;
@@ -24,7 +25,7 @@ namespace BATTS.ViewModels
         public ICommand CompleteCommand { get; }
         public ICommand PushData { get; }
 
-        UserDataModel Test = new UserDataModel();
+       // UserDataModel Test = new UserDataModel();
 
 
         public LoginViewModel()
@@ -38,10 +39,10 @@ namespace BATTS.ViewModels
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             //PushData = new Command(async () => await ExecuteLoadItemsCommand());
 
-            UserDataModel Test = new UserDataModel();
+           // UserDataModel Test = new UserDataModel();
             Items.Clear();
 
-
+           
 
             MessagingCenter.Subscribe<NewItemPage, UserDataModel>(this, "AddItem", async (obj, item) =>
             {
@@ -50,7 +51,7 @@ namespace BATTS.ViewModels
                 await AzuCosmoDBManager.InsertUserData(newItem);
             });
         }
-
+        
        
         async Task ExecuteLoadItemsCommand()
         {

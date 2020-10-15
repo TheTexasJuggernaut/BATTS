@@ -18,14 +18,15 @@ namespace BATTS.Views
 	public partial class LoginPage : ContentPage
 	{
 
+        UserDataModel Test = new UserDataModel();
 
-       
         //public LoginPage ()
         //{
         //	InitializeComponent ();
         //}
 
         //
+        public UserDataModel Item { get; set; }
 
         LoginViewModel vm;
 
@@ -33,6 +34,11 @@ namespace BATTS.Views
         public LoginPage()
         {
             InitializeComponent();
+            Item = new UserDataModel
+            {
+                FirstName = DateTime.Today.ToShortDateString(),
+                LastName = DateTime.Today.ToShortTimeString()
+            };
 
             BindingContext = vm = new LoginViewModel();
             vm.Title = "Login Page";
@@ -55,7 +61,21 @@ namespace BATTS.Views
         async void AddItem_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-            // vm.PushData.Execute(null);
+       
+
+        }
+        async void NewTest(object sender, EventArgs e)
+        {
+            try
+            {
+                await AzuCosmoDBManager.InsertUserData(Item);
+                await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            }
+            catch
+            {
+
+            }
+    
 
         }
         async void OnButtonClick(object sender, EventArgs e)
@@ -77,24 +97,6 @@ namespace BATTS.Views
             }
         }
 
-
-
-        //protected async void listItemSelected(object sender, SelectedItemChangedEventArgs e)
-        //{
-        //    var todoItem = e.SelectedItem as UserDataModel;
-
-        //    if (todoItem == null)
-        //        return;
-
-        //    await Navigation.PushAsync(new ItemDetailPage(todoItem, false));
-        //}
-
-        //protected async void AddNewClicked(object sender, EventArgs e)
-        //{
-        //    var toDo = new Item();
-        //    var todoPage = new ItemDetailPage(toDo, true);
-
-        //    await Navigation.PushModalAsync(new NavigationPage(todoPage));
-        //}
+        
     }
 }
