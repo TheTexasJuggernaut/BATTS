@@ -12,7 +12,7 @@ namespace BATTS.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+       // public IDataStore<UserDataModel> DataStore => DependencyService.Get<IDataStore<UserDataModel>>() ?? new MockDataStore();
 
         bool isBusy = false;
         public bool IsBusy

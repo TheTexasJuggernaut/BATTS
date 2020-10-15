@@ -11,7 +11,7 @@ using BATTS.Services;
 
 namespace BATTS.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
     {
         public ObservableCollection<UserDataModel> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
@@ -22,10 +22,12 @@ namespace BATTS.ViewModels
 
         public ICommand RefreshCommand { get; }
         public ICommand CompleteCommand { get; }
+        public ICommand PushData { get; }
+
+        UserDataModel Test = new UserDataModel();
 
 
-
-        public ItemsViewModel()
+        public LoginViewModel()
         {
             Title = "Browse";
             Items = new ObservableCollection<UserDataModel>();
@@ -33,8 +35,11 @@ namespace BATTS.ViewModels
             ToDoItems = new List<UserDataModel>();
             RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
 
-
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            //PushData = new Command(async () => await ExecuteLoadItemsCommand());
+
+            UserDataModel Test = new UserDataModel();
+            Items.Clear();
 
 
 
@@ -46,8 +51,7 @@ namespace BATTS.ViewModels
             });
         }
 
-
-
+       
         async Task ExecuteLoadItemsCommand()
         {
             if (IsBusy)
@@ -57,11 +61,14 @@ namespace BATTS.ViewModels
 
             try
             {
-                Items.Clear();
+
+
                 var items = await AzuCosmoDBManager.GetUserData();
+
                 foreach (var item in items)
                 {
                     Items.Add(item);
+
                 }
             }
             catch (Exception ex)
@@ -82,6 +89,7 @@ namespace BATTS.ViewModels
 
             try
             {
+
                 ToDoItems = await AzuCosmoDBManager.GetUserData();
             }
             finally
@@ -99,7 +107,8 @@ namespace BATTS.ViewModels
 
             try
             {
-                //await AzuCosmoDBManager.GetUserData();
+
+                //await AzuCosmoDBManager.CompleteItem(item);
                 ToDoItems = await AzuCosmoDBManager.GetUserData();
             }
             finally
@@ -107,5 +116,8 @@ namespace BATTS.ViewModels
                 IsBusy = false;
             }
         }
+
+      //  Login Try
     }
 }
+

@@ -29,7 +29,7 @@ namespace BATTS.Views
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Item;
+            var item = args.SelectedItem as UserDataModel;
             if (item == null)
                 return;
 
@@ -59,7 +59,7 @@ namespace BATTS.Views
 
         protected async void listItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var todoItem = e.SelectedItem as Item;
+            var todoItem = e.SelectedItem as UserDataModel;
 
             if (todoItem == null)
                 return;
@@ -69,7 +69,7 @@ namespace BATTS.Views
 
         protected async void AddNewClicked(object sender, EventArgs e)
         {
-            var toDo = new Item();
+            var toDo = new UserDataModel();
             var todoPage = new ItemDetailPage(toDo, true);
 
             await Navigation.PushModalAsync(new NavigationPage(todoPage));

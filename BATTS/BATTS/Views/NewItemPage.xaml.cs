@@ -11,16 +11,16 @@ namespace BATTS.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewItemPage : ContentPage
     {
-        public Item Item { get; set; }
+        public UserDataModel Item { get; set; }
 
         public NewItemPage()
         {
             InitializeComponent();
 
-            Item = new Item
+            Item = new UserDataModel
             {
-                Text = "Item name",
-                Description = "This is an item description."
+                FirstName = "Item name",
+                LastName = "This is an item description."
             };
 
             BindingContext = this;

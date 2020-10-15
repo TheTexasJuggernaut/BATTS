@@ -10,7 +10,7 @@ namespace BATTS.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ItemDetailPage : ContentPage
     {
-        Item Item;
+        UserDataModel Item;
         bool IsNew;
         ItemDetailViewModel ViewModel;
         ItemDetailViewModel viewModel;
@@ -22,7 +22,7 @@ namespace BATTS.Views
             BindingContext = this.viewModel = viewModel;
         }
 
-        public ItemDetailPage(Item item, bool isNew)
+        public ItemDetailPage(UserDataModel item, bool isNew)
         {
             InitializeComponent();
 

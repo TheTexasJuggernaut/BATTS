@@ -27,27 +27,27 @@ namespace BATTS.ViewModels
         }
 
 
-        public Item item { get; set; }
+        public UserDataModel item { get; set; }
         public ICommand SaveCommand { get; }
 
         public event EventHandler SaveComplete;
 
-        public ItemDetailViewModel(Item Item, bool isNew)
+        public ItemDetailViewModel(UserDataModel Item, bool isNew)
         {
             IsNew = isNew;
             Item = item;
 
             SaveCommand = new Command(async () => await ExecuteSaveCommand());
 
-            Title = IsNew ? "New To Do" : item.Name;
+            Title = IsNew ? "New To Do" : item.FirstName;
         }
 
         async Task ExecuteSaveCommand()
         {
             if (IsNew)
-                await AzuCosmoDBManager.InsertItem(item);
+                await AzuCosmoDBManager.InsertUserData(item);
             else
-                await AzuCosmoDBManager.UpdateItem(item);
+                await AzuCosmoDBManager.UpdateUserData(item);
 
             SaveComplete?.Invoke(this, new EventArgs());
         }

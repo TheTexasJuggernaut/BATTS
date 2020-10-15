@@ -19,12 +19,11 @@ namespace BATTS
         {
             InitializeComponent();
 
-            if (UseMockDataStore)
-                DependencyService.Register<MockDataStore>();
-            else
-                DependencyService.Register<AzureDataStore>();
+            
+            //Navigation to MainPage
+            MainPage = new MainPage();// --> Bypass
 
-            MainPage = new MainPage();
+            //MainPage = new LoginPage(); 
         }
 
          protected override void OnStart()
