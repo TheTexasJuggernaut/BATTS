@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BATTS.Views.TutorialPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to the BATTS APP" TextDecorations="Underline"  />
+            <Label Text="Graduate SWEN Final Project " TextDecorations="Underline" />
+            <Label Text="By Zach Nations and Shawn Alexander" TextDecorations="Underline" />
+            <Label Text="" TextDecorations="Strikethrough" />
+            <Label Text="--------------BATTS Tutorial--------------"  />
+            <Label Text="Coaches have the ability to update Data."  />
+            <Label Text="Creating Teams and players with stats,"  />
+            <Label Text="as well as, the ability to remove them."  />
+            <Label Text="All other users may only view the data."  />
+            <Label Text="This App requires a stable internet connection in "  />
+            <Label Text="order to maintain connection to the cloud database."  />
+            <Label Text="Follow the UI buttons for each action you wish"  />
+            <Label Text="to perform."  />
+            <Label Text="Please enjoy the application. " />
+            <Label Text="--------------BATTS Tutorial--------------"  />
+            <Label Text="" TextDecorations="Strikethrough" />
+            <Button Grid.Row="3" Text = "Back to Menu" Clicked="GoBack" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

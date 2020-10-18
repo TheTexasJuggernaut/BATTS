@@ -12,12 +12,23 @@ using BATTS.Views;
 using BATTS.ViewModels;
 using BATTS.Services;
 
+
+using System.Collections.ObjectModel;
+
+
+
 namespace BATTS.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LoginPage : ContentPage
 	{
+        //public ObservableCollection<UserDataModel> Items { get; set; }
 
+        Entry Email;
+        Entry Password;
+
+        private string newUserEmail;
+        private string newUserPass;
         UserDataModel Test = new UserDataModel();
 
         //public LoginPage ()
@@ -26,18 +37,21 @@ namespace BATTS.Views
         //}
 
         //
-        public UserDataModel Item { get; set; }
+        public UserDataModel User { get; set; }
 
         LoginViewModel vm;
 
+        //public UserDataModel Items = new UserDataModel();
 
         public LoginPage()
         {
             InitializeComponent();
-            Item = new UserDataModel
+            User = new UserDataModel
             {
                 FirstName = DateTime.Today.ToShortDateString(),
-                LastName = DateTime.Today.ToShortTimeString()
+                LastName = DateTime.Today.ToShortTimeString(),
+                Email = "Shawn",
+                Password = "2"
             };
 
             BindingContext = vm = new LoginViewModel();
@@ -56,7 +70,41 @@ namespace BATTS.Views
         //    ItemsListView.SelectedItem = null;
         //}
 
+        async public void DoLogin(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+            // if (email.Text == "****@gmail.co" && password.Text == "12345" || email.Text == newUserEmail && password.Text == newUserPass)
+            //
+            /// {
+            //     Toast.MakeText(this, "Login successfully done!", ToastLength.Long).Show();
+            //      StartActivity(typeof(ViewActivity));
+            // }
+            //  else
+            //  {
+            //      Toast.MakeText(this, "Wrong credentials found!", ToastLength.Long).Show();
+            //  }
+            var getUser = await AzuCosmoDBManager.GetUserData();
+            string xx = "xx";
+            for (int x =0; x <= 100; ++x)
+            {
+                string xWx = "xx";
+            }
+            await Navigation.PushModalAsync(new NavigationPage(new Menu()));
 
+        }
+        async public void DoRegister(object sender, EventArgs e)
+        {
+            
+            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+            //Items = new ObservableCollection<UserDataModel>();
+
+
+            User.Email = email.Text;
+            User.Password = pwd.Text;
+
+            await AzuCosmoDBManager.InsertUserData(User);
+            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+        }
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
@@ -68,7 +116,7 @@ namespace BATTS.Views
         {
             try
             {
-                await AzuCosmoDBManager.InsertUserData(Item);
+                await AzuCosmoDBManager.InsertUserData(User);
                 await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
             }
             catch
