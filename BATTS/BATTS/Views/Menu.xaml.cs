@@ -9,7 +9,9 @@ using Xamarin.Forms.Xaml;
 
 namespace BATTS.Views
 {   // <Image Source="Baseball.jpg" Aspect="AspectFill" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All" />
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Menu : ContentPage
     {
         public Menu ()

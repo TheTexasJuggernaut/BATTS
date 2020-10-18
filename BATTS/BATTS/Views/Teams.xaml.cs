@@ -14,6 +14,10 @@ using BATTS.Models;
 namespace BATTS.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    public static class GlobalVariables
+    {
+        public static string Global;
+    }
     public partial class Teams : ContentPage
 
     {
@@ -66,14 +70,16 @@ namespace BATTS.Views
             cities.Add("Chicago Bears");
             foreach (var item in cities)
             {
+
                 Button CurrentButton = new Button()
                 {
                     Text = item,
-                    TextColor = Color.White
+                    TextColor = Color.White,
+                    StyleId = item
                     
                 };
-                CurrentButton.Clicked += MyButton_Clicked;
 
+                CurrentButton.Clicked += MyButton_Clicked;
                 TeamViews.Children.Add(CurrentButton);
                
             }
@@ -84,9 +90,10 @@ namespace BATTS.Views
         async private void MyButton_Clicked(object sender, EventArgs e)
         {
             Button ClickedButton = (Button)sender;
+            ClickedButton.Text = "You clicked team:" + ClickedButton.StyleId;
             await Navigation.PushModalAsync(new NavigationPage(new Players()));
         }
-
+       
 
     }
 }
