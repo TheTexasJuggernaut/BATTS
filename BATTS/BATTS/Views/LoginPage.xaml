@@ -19,12 +19,10 @@
                 <Entry x:Name="pwd" Text="{Binding Password, Mode=TwoWay}"
                        Placeholder="Password"
                        IsPassword="True" />
-                <Label Text="Invalid credentials entered" 
-                       IsVisible="{Binding AreCredentialsInvalid}" 
-                       TextColor="Red" />     
+                <Label x:Name="notify" Text="{Binding Valid, Mode=TwoWay}" />     
                 
             </StackLayout>
-            <StackLayout Grid.Row="1">
+           <!-- <StackLayout Grid.Row="1">
                 <ListView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
                 VerticalOptions="FillAndExpand"
@@ -52,7 +50,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-            </StackLayout>
+            </StackLayout> -->
             <Button Grid.Row="2" Text="Login" Clicked="DoLogin" />
             <Button Grid.Row="3" Text = "Register" Clicked="DoRegister" />            
         </Grid>
