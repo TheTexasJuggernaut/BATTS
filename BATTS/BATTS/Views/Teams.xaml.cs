@@ -14,79 +14,188 @@ using BATTS.Models;
 namespace BATTS.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public static class GlobalVariables
-    {
-        public static string Global;
-    }
     public partial class Teams : ContentPage
 
     {
-        Button button;
+        public int remove = 0;
+        public int add = 0;
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
         public Teams ()
 		{
 			InitializeComponent ();
-            //TeamViews.ItemsSource = menuItems;
-            //ListView.ItemsSource = menuItems;
-            //ListViewMenu.SelectedItem = menuItems[0];
-            //ListViewMenu.ItemSelected += async (sender, e) =>
-            //{
-            //   if (e.SelectedItem == null)
-            //      return;
 
-            //  var id = (int)((HomeMenuItem)e.SelectedItem).Id;
-            // await RootPage.NavigateFromMenu(id);
-            // };
-
-
-
-            //Create Buttons dynamically
-            /*for (int i = 0; i < 10; i++)
-                {
-                    Button CurrentButton = new Button()
-                        {
-                            Text = "Button " + (i + 1),
-                            StyleId = (i + 1).ToString()
-                        };
-
-                    CurrentButton.Clicked += MyButton_Clicked;
-
-                    TeamViews.Children.Add(CurrentButton);
-                }*/
         }
 
         async public void GoBack(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new Menu()));
         }
+        public void CreateTeam(object sender, EventArgs e)
+        {
+            Button ClickedButton = (Button)sender;
+            var position = Team.CursorPosition;
+            if(Team.Text == null)
+            {
+                ClickedButton.Text = "No team entered";
+            }
+            add = 1;
+        }
         private void AddItemsToUi(object sender, EventArgs e)
         {
 
             //Logic for teams from database
-            var cities = new List<string>();
-            cities.Add("New York Jags");
-            cities.Add("London Robins");
-            cities.Add("Mumbai Wolves");
-            cities.Add("Chicago Bears");
-            foreach (var item in cities)
+            var Teams = new List<string>();
+            //Teams.Add(Team.Text);
+            Teams.Add("New York Jags");
+            Teams.Add("London Robins");
+            Teams.Add("Mumbai Wolves");
+            Teams.Add("Chicago Bears");
+
+            if(remove == 0 && add == 0)
             {
-
-                Button CurrentButton = new Button()
+                if (Team.Text == null)
                 {
-                    Text = item,
-                    TextColor = Color.White,
-                    StyleId = item
-                    
-                };
+                    foreach (var item in Teams)
+                    {
 
-                CurrentButton.Clicked += MyButton_Clicked;
-                TeamViews.Children.Add(CurrentButton);
-               
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
+                else
+                {
+                    foreach (var item in Teams)
+                    {
+
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
             }
+            if (remove == 1 && add == 0)
+            {
+                if (Team.Text == null)
+                {
+                    foreach (var item in Teams)
+                    {
+
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
+                else
+                {
+                    foreach (var item in Teams)
+                    {
+                        if (Team.Text == item)
+                        {
+                            Teams.Remove(Team.Text);
+                        }
+                    }
+                    foreach (var item in Teams)
+                    {
+
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
+            }
+            if (remove == 0 && add == 1)
+            {
+                if (Team.Text == null)
+                {
+                    foreach (var item in Teams)
+                    {
+
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
+                else
+                {
+                    Teams.Add(Team.Text);
+                    foreach (var item in Teams)
+                    {
+
+                        Button CurrentButton = new Button()
+                        {
+                            Text = item,
+                            TextColor = Color.White,
+                            StyleId = item
+
+                        };
+
+                        CurrentButton.Clicked += MyButton_Clicked;
+                        TeamViews.Children.Add(CurrentButton);
+
+                    }
+                }
+            }
+            if(remove == 1 && add == 1)
+            {
+                remove = 0;
+                add = 0;
+            }
+            
+            
 
         }
 
-
+        public void RemoveTeam(object sender, EventArgs e)
+        {
+            Button ClickedButton = (Button)sender;
+            var position = Team.CursorPosition;
+            if (Team.Text == null)
+            {
+                ClickedButton.Text = "No team entered";
+            }
+            remove = 1;
+        }
         async private void MyButton_Clicked(object sender, EventArgs e)
         {
             Button ClickedButton = (Button)sender;

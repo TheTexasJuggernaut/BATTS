@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BATTS.Views.TutorialPage">
     <ContentPage.Content>
-        <StackLayout>
+        <ScrollView>
+            <StackLayout>
             <Label Text="Welcome to the BATTS APP" TextDecorations="Underline"  />
             <Label Text="Graduate SWEN Final Project " TextDecorations="Underline" />
             <Label Text="By Zach Nations and Shawn Alexander" TextDecorations="Underline" />
@@ -22,5 +23,6 @@
             <Label Text="" TextDecorations="Strikethrough" />
             <Button Grid.Row="3" Text = "Back to Menu" Clicked="GoBack" />
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
