@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-
 using BATTS.Models;
+using BATTS.Views;
+using BATTS.ViewModels;
+using BATTS.Services;
 
+
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace BATTS.Views
 {
@@ -17,21 +22,27 @@ namespace BATTS.Views
     public partial class Teams : ContentPage
 
     {
+        TeamsViewModel TVM;
+        public string sessionID;
         public int remove = 0;
         public int add = 0;
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
-        public Teams ()
+        public Teams (string SessionID)
 		{
+            sessionID = SessionID;
 			InitializeComponent ();
+            BindingContext = TVM = new TeamsViewModel(sessionID);
+            TVM.Title = "Teams Page";
 
         }
 
         async public void GoBack(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new Menu()));
+            await Navigation.PushModalAsync(new NavigationPage(new Menu(sessionID)));
         }
-        public void CreateTeam(object sender, EventArgs e)
+        public async void CreateTeam(object sender, EventArgs e)
         {
+            await TVM.AddTeamAsync();
             Button ClickedButton = (Button)sender;
             var position = Team.CursorPosition;
             if(Team.Text == null)
@@ -40,9 +51,9 @@ namespace BATTS.Views
             }
             add = 1;
         }
-        private void AddItemsToUi(object sender, EventArgs e)
+        private async void AddItemsToUi(object sender, EventArgs e)
         {
-
+         var TeamsDB = await TVM.GetTeamAsync();
             //Logic for teams from database
             var Teams = new List<string>();
             //Teams.Add(Team.Text);

@@ -47,7 +47,8 @@ namespace BATTS.Views
             bool IsVerified = await LVM.LoginCheckAsync(email.Text, pwd.Text);
             if (IsVerified)
             {
-                await Navigation.PushModalAsync(new NavigationPage(new Menu()));
+                string sessionID = await LVM.GetUserIDAsync(email.Text);
+                await Navigation.PushModalAsync(new NavigationPage(new Menu(sessionID)));
             }
             else
             {

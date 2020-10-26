@@ -22,7 +22,7 @@ namespace BATTS.Views
         }
         async public void GoBack(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new Teams()));
+            await Navigation.PushModalAsync(new NavigationPage(new Teams("test")));
         }
         private void AddItemsToUi(object sender, EventArgs e)
         {

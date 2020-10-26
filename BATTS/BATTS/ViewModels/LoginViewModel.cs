@@ -35,12 +35,12 @@ namespace BATTS.ViewModels
             LoginDB.Clear();
 
 
-            MessagingCenter.Subscribe<NewItemPage, UserDataModel>(this, "AddItem", async (obj, item) =>
-            {
-                var newItem = item as UserDataModel;
-                //Items.Add(newItem);
-                await AzuCosmoDBManager.InsertUserData(newItem);
-            });
+            //MessagingCenter.Subscribe<NewItemPage, UserDataModel>(this, "AddItem", async (obj, item) =>
+            //{
+            //    var newItem = item as UserDataModel;
+            //    //Items.Add(newItem);
+            //    await AzuCosmoDBManager.InsertUserData(newItem);
+            //});
         }
 
         //10/25/20 MVVM Model Repairs 
@@ -73,6 +73,38 @@ namespace BATTS.ViewModels
             {
                 Debug.WriteLine(ex);
                 return false;
+            }
+
+
+        }
+
+        public async Task<string> GetUserIDAsync(string Email)
+        {
+            email = Email;
+          
+
+            try
+            {
+                LoginDB = await AzuCosmoDBManager.GetUserData();
+
+                if (LoginDB.Exists(x => x.Email == email))
+                {
+                    var User = LoginDB.Where(p => p.Email == email).First();
+                    // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
+                   
+                        return User.Id;
+                }
+                else
+                {
+                    return "";
+                }
+             
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return "";
             }
 
 

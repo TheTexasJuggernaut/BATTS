@@ -14,10 +14,11 @@ namespace BATTS.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Menu : ContentPage
     {
-        public Menu ()
+        string sessionID;
+        public Menu (string SessionID)
 		{
 			InitializeComponent ();
-
+            sessionID = SessionID;
         }
         async public void ViewTeams(object sender, EventArgs e)
         {
@@ -25,14 +26,14 @@ namespace BATTS.Views
             // var buttonAddTeam = FindViewById<Button>(Resource.Id.AddTeam);
 
             // var buttonTeam = FindViewById<Button>(Resource.Id.btviewteams1);
-            await Navigation.PushModalAsync(new NavigationPage(new Teams()));
+            await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
 
         }
         async public void DoTutorial(object sender, EventArgs e)
         {
             // Toast.MakeText(this, "Please View the manual for a a tutorial on the BATSS App", ToastLength.Long).Show();
             //SetContentView(Resource.Layout.Tutorial);
-            await Navigation.PushModalAsync(new NavigationPage(new TutorialPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new TutorialPage(sessionID)));
         }
         async public void GoBack(object sender, EventArgs e)
         {

@@ -19,14 +19,15 @@ namespace BATTS.Services
     public class AzuCosmoDBManager
     {
         static DocumentClient docClient = null;
+        static DocumentClient docClient2 = null;
 
         static readonly string databaseName = "UserRegistry";
         static readonly string collectionName = "UserData";
 
-        static readonly string databaseTeam = "Teams";
-        static readonly string collectionTeam = "TeamData";
+        static readonly string databaseTeam = "UserRegistry";
+        static readonly string collectionTeam = "TeamsData";
 
-        static readonly string databasePlayers = "Players";
+        static readonly string databasePlayers = "UserRegistry";
         static readonly string collectionPlayers= "PlayersData";
 
         static async Task<bool> Initialize()
@@ -142,20 +143,20 @@ namespace BATTS.Services
 
         static async Task<bool> InitializeTeams()
         {
-            if (docClient != null)
+            if (docClient2 != null)
                 return true;
 
             try
             {
-                docClient = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
+                docClient2 = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
 
                 // Create the database - this can also be done through the portal
-                await docClient.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseTeam });
+                await docClient2.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseTeam });
 
                 // Create the collection - make sure to specify the RUs - has pricing implications
                 // This can also be done through the portal
 
-                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                await docClient2.CreateDocumentCollectionIfNotExistsAsync(
                     UriFactory.CreateDatabaseUri(databaseTeam),
                     new DocumentCollection { Id = collectionTeam },
                     new RequestOptions { OfferThroughput = 400 }
@@ -166,7 +167,7 @@ namespace BATTS.Services
             {
                 Debug.WriteLine(ex);
 
-                docClient = null;
+                docClient2 = null;
 
                 return false;
             }
@@ -181,22 +182,22 @@ namespace BATTS.Services
         /// Pulls the data from the User Data Model databse and stores into a list
         /// </summary>
         /// <returns></returns>
-        public async static Task<List<UserDataModel>> GetTeamData()
+        public async static Task<List<TeamDataModel>> GetTeamData()
         {
-            var items = new List<UserDataModel>();
+            var items = new List<TeamDataModel>();
 
             if (!await InitializeTeams())
                 return items;
 
-            var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
+            var itemQuery = docClient2.CreateDocumentQuery<TeamDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
-                .Where(item => item.ActiveUser == true)
+                .Where(item => item.ActiveTeam == true)
                 .AsDocumentQuery();
 
             while (itemQuery.HasMoreResults)
             {
-                var queryResults = await itemQuery.ExecuteNextAsync<UserDataModel>();
+                var queryResults = await itemQuery.ExecuteNextAsync<TeamDataModel>();
 
                 items.AddRange(queryResults);
             }
@@ -209,12 +210,12 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task InsertTeamData(UserDataModel item)
+        public async static Task InsertTeamData(TeamDataModel item)
         {
             if (!await InitializeTeams())
                 return;
 
-            await docClient.CreateDocumentAsync(
+            await docClient2.CreateDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
                 item);
         }
@@ -224,13 +225,13 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task DeleteTeamData(UserDataModel item)
+        public async static Task DeleteTeamData(TeamDataModel item)
         {
             if (!await InitializeTeams())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
-            await docClient.DeleteDocumentAsync(docUri);
+            await docClient2.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
 
@@ -238,13 +239,13 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task UpdateTeamData(UserDataModel item)
+        public async static Task UpdateTeamData(TeamDataModel item)
         {
             if (!await InitializeTeams())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
-            await docClient.ReplaceDocumentAsync(docUri, item);
+            await docClient2.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
