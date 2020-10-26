@@ -23,6 +23,12 @@ namespace BATTS.Services
         static readonly string databaseName = "UserRegistry";
         static readonly string collectionName = "UserData";
 
+        static readonly string databaseTeam = "Teams";
+        static readonly string collectionTeam = "TeamData";
+
+        static readonly string databasePlayers = "Players";
+        static readonly string collectionPlayers= "PlayersData";
+
         static async Task<bool> Initialize()
         {
             if (docClient != null)
@@ -56,6 +62,7 @@ namespace BATTS.Services
 
             return true;
         }
+
         #region User Data Models
         // <GetUserData>
 
@@ -126,6 +133,228 @@ namespace BATTS.Services
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseName, collectionName, item.Id);
+            await docClient.ReplaceDocumentAsync(docUri, item);
+        }
+        // </UpdateToDoItem>  
+
+
+        #endregion
+
+        static async Task<bool> InitializeTeams()
+        {
+            if (docClient != null)
+                return true;
+
+            try
+            {
+                docClient = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
+
+                // Create the database - this can also be done through the portal
+                await docClient.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseTeam });
+
+                // Create the collection - make sure to specify the RUs - has pricing implications
+                // This can also be done through the portal
+
+                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databaseTeam),
+                    new DocumentCollection { Id = collectionTeam },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+
+                docClient = null;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Team Data Models
+        // <GetUserData>
+
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<UserDataModel>> GetTeamData()
+        {
+            var items = new List<UserDataModel>();
+
+            if (!await InitializeTeams())
+                return items;
+
+            var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
+                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.ActiveUser == true)
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<UserDataModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
+
+
+        // <InsertUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task InsertTeamData(UserDataModel item)
+        {
+            if (!await InitializeTeams())
+                return;
+
+            await docClient.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                item);
+        }
+        // </InsertToDoItem>  
+
+        // <DeleteUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task DeleteTeamData(UserDataModel item)
+        {
+            if (!await InitializeTeams())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
+            await docClient.DeleteDocumentAsync(docUri);
+        }
+        // </DeleteToDoItem>  
+
+        // <UpdateUserItem>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task UpdateTeamData(UserDataModel item)
+        {
+            if (!await InitializeTeams())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
+            await docClient.ReplaceDocumentAsync(docUri, item);
+        }
+        // </UpdateToDoItem>  
+
+
+        #endregion
+
+        static async Task<bool> InitializePlayers()
+        {
+            if (docClient != null)
+                return true;
+
+            try
+            {
+                docClient = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
+
+                // Create the database - this can also be done through the portal
+                await docClient.CreateDatabaseIfNotExistsAsync(new Database { Id = databasePlayers });
+
+                // Create the collection - make sure to specify the RUs - has pricing implications
+                // This can also be done through the portal
+
+                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databasePlayers),
+                    new DocumentCollection { Id = collectionPlayers },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+
+                docClient = null;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Player Data Models
+        // <GetUserData>
+
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<UserDataModel>> GetPlayerData()
+        {
+            var items = new List<UserDataModel>();
+
+            if (!await InitializePlayers())
+                return items;
+
+            var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
+                UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.ActiveUser == true)
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<UserDataModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
+
+
+        // <InsertUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task InsertPlayerData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            await docClient.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
+                item);
+        }
+        // </InsertToDoItem>  
+
+        // <DeleteUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task DeletePlayerData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
+            await docClient.DeleteDocumentAsync(docUri);
+        }
+        // </DeleteToDoItem>  
+
+        // <UpdateUserItem>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task UpdatePlayerData(UserDataModel item)
+        {
+            if (!await Initialize())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
             await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
