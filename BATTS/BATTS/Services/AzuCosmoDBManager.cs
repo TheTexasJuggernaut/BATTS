@@ -73,7 +73,7 @@ namespace BATTS.Services
             var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
-                .Where(item => item.ActiveUser == false )
+                .Where(item => item.ActiveUser == true )
                 .AsDocumentQuery();
 
             while (itemQuery.HasMoreResults)

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BATTS.Views.Register"
+             Title="{Binding Title}"
+             x:Name="BrowseItemsPage">
+    <ContentPage.Content>
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0">
+                <Label Text="Please fill in each field" />
+                <Label x:Name="notify" Text="{Binding Valid, Mode=TwoWay}" />
+                
+                <Entry x:Name="firstname" Text="{Binding FirstName, Mode=TwoWay}"
+                       Placeholder="First Name" />                
+                <Entry x:Name="lastname" Text="{Binding Last Name, Mode=TwoWay}"
+                       Placeholder="Last Name"/>                
+                <Entry x:Name="email" Text="{Binding Email, Mode=TwoWay}"
+                     Placeholder="Email"/>
+                <Entry x:Name="role" Text="{Binding Role, Mode=TwoWay}"
+                     Placeholder="Role"/>
+                <Entry x:Name="password" Text="{Binding Password, Mode=TwoWay}"
+                     Placeholder="Password"
+                     IsPassword="True" />
+
+            </StackLayout>            
+            <StackLayout Grid.Row="1">                
+                <Button Grid.Row="1" Text = "Register New Account" Clicked="DoRegister" />
+                <Button Grid.Row="2" Text = "Back" Clicked="GoBack" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

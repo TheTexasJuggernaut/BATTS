@@ -8,51 +8,76 @@ using Xamarin.Forms;
 using BATTS.Models;
 using BATTS.Views;
 using BATTS.Services;
+using System.Linq;
 
 namespace BATTS.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        public ObservableCollection<UserDataModel> Items { get; set; }
-        public Command LoadItemsCommand { get; set; }
-        
+        //10/25/20 Creates a model that is shared by functions 
 
-
-        List<UserDataModel> todoItems;
-        public List<UserDataModel> ToDoItems { get => todoItems; set => SetProperty(ref todoItems, value); }
+        public string email;
+        public string password;
+        List<UserDataModel> loginDB;
+        public List<UserDataModel> LoginDB { get => loginDB; set => SetProperty(ref loginDB, value); }
 
         public ICommand RefreshCommand { get; }
-        public ICommand CompleteCommand { get; }
-        public ICommand PushData { get; }
-
-       // UserDataModel Test = new UserDataModel();
-
+               
 
         public LoginViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<UserDataModel>();
 
-            ToDoItems = new List<UserDataModel>();
-            RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
 
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            //PushData = new Command(async () => await ExecuteLoadItemsCommand());
+            LoginDB = new List<UserDataModel>();
+            // RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
+            // LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());              
+            LoginDB.Clear();
 
-           // UserDataModel Test = new UserDataModel();
-            Items.Clear();
-
-           
 
             MessagingCenter.Subscribe<NewItemPage, UserDataModel>(this, "AddItem", async (obj, item) =>
             {
                 var newItem = item as UserDataModel;
-                Items.Add(newItem);
+                //Items.Add(newItem);
                 await AzuCosmoDBManager.InsertUserData(newItem);
             });
         }
-        
-       
+
+        //10/25/20 MVVM Model Repairs 
+       public async Task<bool> LoginCheckAsync(string Email, string Password)
+        {
+            email = Email;
+            password = Password;
+           
+            try
+            {
+                LoginDB = await AzuCosmoDBManager.GetUserData();
+
+                if (LoginDB.Exists(x => x.Email == email))
+                {
+                    var User = LoginDB.Where(p => p.Email == email).First();
+                    // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
+                    if (User.Password == password)
+                    {
+                        return true;                        
+                    }
+                    else
+                    {                        
+                        return false;
+                    }
+                }
+                return false;
+               
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+
+
+        }
+
         async Task ExecuteLoadItemsCommand()
         {
             if (IsBusy)
@@ -68,7 +93,7 @@ namespace BATTS.ViewModels
 
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    //Items.Add(item);
 
                 }
             }
@@ -91,7 +116,7 @@ namespace BATTS.ViewModels
             try
             {
 
-                ToDoItems = await AzuCosmoDBManager.GetUserData();
+                LoginDB = await AzuCosmoDBManager.GetUserData();
             }
             finally
             {
@@ -99,26 +124,8 @@ namespace BATTS.ViewModels
             }
         }
 
-        async Task ExecuteCompleteCommand(UserDataModel item)
-        {
-            if (IsBusy)
-                return;
 
-            IsBusy = true;
 
-            try
-            {
-
-                //await AzuCosmoDBManager.CompleteItem(item);
-                ToDoItems = await AzuCosmoDBManager.GetUserData();
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-      //  Login Try
     }
 }
 

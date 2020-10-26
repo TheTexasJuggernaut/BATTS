@@ -22,225 +22,68 @@ namespace BATTS.Views
 	public partial class LoginPage : ContentPage
 	{
         //Create a list object 10/18/20
-        public List<UserDataModel> LoginDB = new List<UserDataModel>();
-        public ICommand LoginDBVerify { get; set; }
-
-        //public ObservableCollection<UserDataModel> Items { get; set; }
-
-        
-        UserDataModel Test = new UserDataModel();
-
-        //public LoginPage ()
-        //{
-        //	InitializeComponent ();
-        //}
-
-        //
+        public List<UserDataModel> LoginDB = new List<UserDataModel>();   
+                       
+              
         public UserDataModel User { get; set; }
 
-        LoginViewModel vm;
+        LoginViewModel LVM;
 
         //public UserDataModel Items = new UserDataModel();
 
         public LoginPage()
         {
             InitializeComponent();
-            User = new UserDataModel
-            {
-                FirstName = DateTime.Today.ToShortDateString(),
-                LastName = DateTime.Today.ToShortTimeString(),
-                Email = "Shawn",
-                Password = "2"
-            };
-
-            BindingContext = vm = new LoginViewModel();
-            vm.Title = "Login Page";
+       
+            BindingContext = LVM = new LoginViewModel();
+            LVM.Title = "Login Page";
         }
 
-        //async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
-        //{
-        //    var item = args.SelectedItem as UserDataModel;
-        //    if (item == null)
-        //        return;
-
-        //    await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item, true)));
-
-        //    // Manually deselect item.
-        //    ItemsListView.SelectedItem = null;
-        //}
+      
 
         async public void DoLogin(object sender, EventArgs e)
         {
-            //await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-            // if (email.Text == "****@gmail.co" && password.Text == "12345" || email.Text == newUserEmail && password.Text == newUserPass)
-            //
-            /// {
-            //     Toast.MakeText(this, "Login successfully done!", ToastLength.Long).Show();
-            //      StartActivity(typeof(ViewActivity));
-            // }
-            //  else
-            //  {
-            //      Toast.MakeText(this, "Wrong credentials found!", ToastLength.Long).Show();
-            //  }
-            // var getUser = await AzuCosmoDBManager.GetUserData(); 10/18/20
-
-            //Copies from Cloud DB to Local List DB 10/18/20
-           // LoginDBVerify = new Command(async () => await ExecuteLoginDBVerify());
-            //Copies from Cloud DB to Local List DB 10/18/20
-            try
+            //10/20/20 Repairs
+            bool IsVerified = await LVM.LoginCheckAsync(email.Text, pwd.Text);
+            if (IsVerified)
             {
-                LoginDB = await AzuCosmoDBManager.GetUserData();
-                if (LoginDB.Exists(x => x.Email == email.Text))
-                {
-                    if (LoginDB.Exists(x => x.Password == pwd.Text))//Need to ensure it is only for that Data Table
-                    {
-                        try
-                        {
-                            
-                            await Navigation.PushModalAsync(new NavigationPage(new Menu()));
-                        }
-                        catch
-                        {
-                            
-                        }
-
-                    }
-                    else
-                    {
-                        notify.Text = "Wrong Password ";
-                        
-                    }
-                }
-                else
-                {
-                    notify.Text = "Wrong UserName ";
-
-                   
-                }
+                await Navigation.PushModalAsync(new NavigationPage(new Menu()));
             }
-            catch
+            else
             {
-
+                notify.Text = "Wrong Credentials, Please try again. If new to BATSS please Register";
             }
-
-            finally
-            {
-                IsBusy = false;
-            }
-
-
-           
-         //   await Navigation.PushModalAsync(new NavigationPage(new Menu())); 10/18/20
 
         }
-        async Task ExecuteLoginDBVerify()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-            //Copies from Cloud DB to Local List DB 10/18/20
-            try
-            {
-                LoginDB = await AzuCosmoDBManager.GetUserData();
-                if (LoginDB.Exists(x => x.Email == email.Text))
-                {
-                    if (LoginDB.Exists(x => x.Password == pwd.Text))
-                    {
-                        try
-                        {
-                            await Navigation.PushModalAsync(new NavigationPage(new Menu()));
-                        }
-                        catch
-                        {
-
-                        }
-
-                    }
-                    else
-                    {
-                        try
-                        {
-                            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-                    }
-                    catch { }
-                }
-            }
-            catch
-            {
-
-            }
-
-            finally
-            {
-                IsBusy = false;
-            }
-        }
+     
         async public void DoRegister(object sender, EventArgs e)
         {
-            
-          //  await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+
+            //  await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
             //Items = new ObservableCollection<UserDataModel>();
+            await Navigation.PushModalAsync(new NavigationPage(new Register()));
 
+           // User.Email = email.Text;
+           // User.Password = pwd.Text;
 
-            User.Email = email.Text;
-            User.Password = pwd.Text;
-
-            await AzuCosmoDBManager.InsertUserData(User);
-            notify.Text = "New User Registered";
-            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-
-        }
-
-        async void AddItem_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-       
+          //  await AzuCosmoDBManager.InsertUserData(User);
+         //   notify.Text = "New User Registered";
+         //   await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
 
         }
-        async void NewTest(object sender, EventArgs e)
-        {
-            try
-            {
-                await AzuCosmoDBManager.InsertUserData(User);
-                await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-            }
-            catch
-            {
 
-            }
-    
-
-        }
-        async void OnButtonClick(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-
-
-        }
+           
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (vm.Items.Count == 0)
-            {
-                vm.RefreshCommand.Execute(null);
-                vm.LoadItemsCommand.Execute(null);
+            //if (vm.Items.Count == 0)
+            //{
+            //  //  vm.RefreshCommand.Execute(null);
+            // //   vm.LoadItemsCommand.Execute(null);
                
-            }
+            //}
         }
 
         
