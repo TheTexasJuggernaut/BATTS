@@ -293,14 +293,14 @@ namespace BATTS.Services
         /// Pulls the data from the User Data Model databse and stores into a list
         /// </summary>
         /// <returns></returns>
-        public async static Task<List<UserDataModel>> GetPlayerData()
+        public async static Task<List<PlayerDataModel>> GetPlayerData()
         {
-            var items = new List<UserDataModel>();
+            var items = new List<PlayerDataModel>();
 
             if (!await InitializePlayers())
                 return items;
 
-            var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
+            var itemQuery = docClient.CreateDocumentQuery<PlayerDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.ActiveUser == true)
@@ -308,7 +308,7 @@ namespace BATTS.Services
 
             while (itemQuery.HasMoreResults)
             {
-                var queryResults = await itemQuery.ExecuteNextAsync<UserDataModel>();
+                var queryResults = await itemQuery.ExecuteNextAsync<PlayerDataModel>();
 
                 items.AddRange(queryResults);
             }
@@ -321,7 +321,7 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task InsertPlayerData(UserDataModel item)
+        public async static Task InsertPlayerData(PlayerDataModel item)
         {
             if (!await Initialize())
                 return;
@@ -336,7 +336,7 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task DeletePlayerData(UserDataModel item)
+        public async static Task DeletePlayerData(PlayerDataModel item)
         {
             if (!await Initialize())
                 return;
@@ -350,7 +350,7 @@ namespace BATTS.Services
         /// <summary> 
         /// </summary>
         /// <returns></returns>
-        public async static Task UpdatePlayerData(UserDataModel item)
+        public async static Task UpdatePlayerData(PlayerDataModel item)
         {
             if (!await Initialize())
                 return;

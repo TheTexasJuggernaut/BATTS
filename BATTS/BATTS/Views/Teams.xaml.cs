@@ -27,13 +27,26 @@ namespace BATTS.Views
         public int remove = 0;
         public int add = 0;
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
+        //public Teams() { InitializeComponent(); }
         public Teams (string SessionID)
 		{
-            sessionID = SessionID;
-			InitializeComponent ();
+            InitializeComponent();
+            sessionID = SessionID;            
             BindingContext = TVM = new TeamsViewModel(sessionID);
             TVM.Title = "Teams Page";
 
+        }
+
+        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        {
+            var item = args.SelectedItem as TeamDataModel;
+            if (item == null)
+                return;
+
+          await Navigation.PushAsync(new Players());
+
+            // Manually deselect item.
+            //ItemsListView.SelectedItem = null;
         }
 
         async public void GoBack(object sender, EventArgs e)
@@ -51,9 +64,11 @@ namespace BATTS.Views
             }
             add = 1;
         }
-        private async void AddItemsToUi(object sender, EventArgs e)
+        private  void AddItemsToUi(object sender, EventArgs e)
         {
-         var TeamsDB = await TVM.GetTeamAsync();
+        // var TeamsDB = await TVM.GetTeamAsync();
+         
+            
             //Logic for teams from database
             var Teams = new List<string>();
             //Teams.Add(Team.Text);
@@ -213,7 +228,16 @@ namespace BATTS.Views
             ClickedButton.Text = "You clicked team:" + ClickedButton.StyleId;
             await Navigation.PushModalAsync(new NavigationPage(new Players()));
         }
-       
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (TVM.TeamDB.Count == 0)
+            {
+                //TVM.RefreshCommand.Execute(null);
+                TVM.LoadItemsCommand.Execute(null);
+            }
+        }
 
     }
 }

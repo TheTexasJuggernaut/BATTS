@@ -15,6 +15,22 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
+        <TableView Intent="Form">
+            <TableRoot>
+                <TableSection Title="Basic Info">
+                    <EntryCell Label="Name" Text="{Binding ToDoItem.Name}"/>
+                    <EntryCell Label="Category" Text="{Binding ToDoItem.Category}" IsEnabled="{Binding IsNew}" />
+                    <SwitchCell Text="Is Complete" On="{Binding ToDoItem.Completed}"/>
+                </TableSection>
+                <TableSection Title="Details">
+                    <ViewCell>
+                        <StackLayout HeightRequest="200">
+                            <Editor Text="{Binding ToDoItem.Description}" HeightRequest="200" MinimumHeightRequest="200" />
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
         <ListView x:Name="ItemsListView"
                 ItemsSource="{Binding item}"
                 VerticalOptions="FillAndExpand"
