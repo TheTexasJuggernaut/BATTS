@@ -42,6 +42,22 @@ namespace BATTS.Models
             }
         }
 
+        string _teamID;
+        [JsonProperty("teamid")]
+        public string TeamID
+        {
+            get => _teamID;
+            set
+            {
+                if (_teamID == value)
+                    return;
+
+                _teamID = value;
+
+                HandlePropertyChanged();
+            }
+        }
+
         string _lastname;
         [JsonProperty("lastname")]
         public string LastName

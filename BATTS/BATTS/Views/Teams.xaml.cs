@@ -57,12 +57,13 @@ namespace BATTS.Views
         {
             await TVM.AddTeamAsync();
             Button ClickedButton = (Button)sender;
-            var position = Team.CursorPosition;
-            if(Team.Text == null)
-            {
-                ClickedButton.Text = "No team entered";
-            }
-            add = 1;
+
+            //var position = Team.CursorPosition;
+            //if(Team.Text == null)
+            //{
+            //    ClickedButton.Text = "No team entered";
+            //}
+            //add = 1;
         }
         private  void AddItemsToUi(object sender, EventArgs e)
         {
@@ -77,136 +78,136 @@ namespace BATTS.Views
             Teams.Add("Mumbai Wolves");
             Teams.Add("Chicago Bears");
 
-            if(remove == 0 && add == 0)
-            {
-                if (Team.Text == null)
-                {
-                    foreach (var item in Teams)
-                    {
+            //if(remove == 0 && add == 0)
+            //{
+            //    if (Team.Text == null)
+            //    {
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-                else
-                {
-                    foreach (var item in Teams)
-                    {
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-            }
-            if (remove == 1 && add == 0)
-            {
-                if (Team.Text == null)
-                {
-                    foreach (var item in Teams)
-                    {
+            //        }
+            //    }
+            //}
+            //if (remove == 1 && add == 0)
+            //{
+            //    if (Team.Text == null)
+            //    {
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-                else
-                {
-                    foreach (var item in Teams)
-                    {
-                        if (Team.Text == item)
-                        {
-                            Teams.Remove(Team.Text);
-                        }
-                    }
-                    foreach (var item in Teams)
-                    {
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (var item in Teams)
+            //        {
+            //            if (Team.Text == item)
+            //            {
+            //                Teams.Remove(Team.Text);
+            //            }
+            //        }
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-            }
-            if (remove == 0 && add == 1)
-            {
-                if (Team.Text == null)
-                {
-                    foreach (var item in Teams)
-                    {
+            //        }
+            //    }
+            //}
+            //if (remove == 0 && add == 1)
+            //{
+            //    if (Team.Text == null)
+            //    {
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-                else
-                {
-                    Teams.Add(Team.Text);
-                    foreach (var item in Teams)
-                    {
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Teams.Add(Team.Text);
+            //        foreach (var item in Teams)
+            //        {
 
-                        Button CurrentButton = new Button()
-                        {
-                            Text = item,
-                            TextColor = Color.White,
-                            StyleId = item
+            //            Button CurrentButton = new Button()
+            //            {
+            //                Text = item,
+            //                TextColor = Color.White,
+            //                StyleId = item
 
-                        };
+            //            };
 
-                        CurrentButton.Clicked += MyButton_Clicked;
-                        TeamViews.Children.Add(CurrentButton);
+            //            CurrentButton.Clicked += MyButton_Clicked;
+            //            TeamViews.Children.Add(CurrentButton);
 
-                    }
-                }
-            }
-            if(remove == 1 && add == 1)
-            {
-                remove = 0;
-                add = 0;
-            }
+            //        }
+            //    }
+            //}
+            //if(remove == 1 && add == 1)
+            //{
+            //    remove = 0;
+            //    add = 0;
+            //}
             
             
 
@@ -215,12 +216,12 @@ namespace BATTS.Views
         public void RemoveTeam(object sender, EventArgs e)
         {
             Button ClickedButton = (Button)sender;
-            var position = Team.CursorPosition;
-            if (Team.Text == null)
-            {
-                ClickedButton.Text = "No team entered";
-            }
-            remove = 1;
+            //var position = Team.CursorPosition;
+            //if (Team.Text == null)
+            //{
+            //    ClickedButton.Text = "No team entered";
+            //}
+            //remove = 1;
         }
         async private void MyButton_Clicked(object sender, EventArgs e)
         {

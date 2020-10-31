@@ -32,8 +32,6 @@ namespace BATTS.ViewModels
             // RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
            LoadItemsCommand = new Command(async () => await GetTeamAsync());              
            // TeamDB.Clear();
-
-
             
         }
 
