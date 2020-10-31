@@ -27,12 +27,12 @@ namespace BATTS.ViewModels
             Title = "Browse";
             sessionID = SessionID;
 
-           TeamDB = new List<TeamDataModel>();
-         
+            TeamDB = new List<TeamDataModel>();
+
             // RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
-           LoadItemsCommand = new Command(async () => await GetTeamAsync());              
-           // TeamDB.Clear();
-            
+            LoadItemsCommand = new Command(async () => await GetTeamAsync());
+            // TeamDB.Clear();
+
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -44,7 +44,7 @@ namespace BATTS.ViewModels
 
             try
             {
-               // TeamDB.Clear();
+                // TeamDB.Clear();
                 var items = await AzuCosmoDBManager.GetTeamData();
                 foreach (var item in items)
                 {
@@ -62,7 +62,7 @@ namespace BATTS.ViewModels
         }
         public async Task<TeamDataModel> GetTeamAsync()
         {
-           
+
 
             try
             {
@@ -89,18 +89,19 @@ namespace BATTS.ViewModels
 
         }
 
-        public async Task<TeamDataModel> AddTeamAsync()
+        public async Task<TeamDataModel> AddTeamAsync(string location, string name)
         {
             //Temp Fix
             Team.OwnerID = sessionID;
-            Team.TeamName = "Tigers";
-            Team.LocationCity = "Houston";
+            Team.TeamName = name;
+            Team.LocationCity = location;
             Team.ActiveTeam = true;
-            
-          
+
+
+
             try
             {
-                 await AzuCosmoDBManager.InsertTeamData(Team);
+                await AzuCosmoDBManager.InsertTeamData(Team);
 
                 return Team;
 
@@ -109,6 +110,68 @@ namespace BATTS.ViewModels
             {
                 Debug.WriteLine(ex);
                 return null;
+            }
+
+
+        }
+
+        public async Task<bool> DeleteTeamAsync(string teamid)
+        {
+
+            Team.Id = teamid;
+
+            try
+            {
+                await AzuCosmoDBManager.DeleteTeamData(Team);
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+
+
+        }
+
+        public async Task<string> GetTeamIDAsync(string name, string city)
+        {
+            // email = Email;
+
+
+            try
+            {
+                TeamDB = await AzuCosmoDBManager.GetTeamData();
+
+                if (TeamDB.Exists(x => x.TeamName == name))
+                {
+                    var Team = TeamDB.Where(p => p.TeamName == name).First();
+                    if (Team.LocationCity == city)
+                    {
+                        return Team.Id;
+
+                    }
+                    else
+                    {
+                        return "NCE";
+                    }
+                    // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
+
+                    //return User.Id;
+                }
+                else
+                {
+                    return "NTE";
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return "";
             }
 
 

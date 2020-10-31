@@ -26,6 +26,7 @@ namespace BATTS.Views
         public string sessionID;
         public int remove = 0;
         public int add = 0;
+        TeamDataModel Team = new TeamDataModel();
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
         //public Teams() { InitializeComponent(); }
         public Teams (string SessionID)
@@ -55,9 +56,20 @@ namespace BATTS.Views
         }
         public async void CreateTeam(object sender, EventArgs e)
         {
-            await TVM.AddTeamAsync();
-            Button ClickedButton = (Button)sender;
+            try
+            {
+                Team.TeamName = TeamName.Text.ToString();
+                Team.LocationCity = TeamCity.Text.ToString();
+            }
+            catch
+            {
 
+            }
+            var passer = Team;
+            //TeamName.Text
+            await TVM.AddTeamAsync(TeamCity.Text, TeamName.Text);
+            Button ClickedButton = (Button)sender;
+            
             //var position = Team.CursorPosition;
             //if(Team.Text == null)
             //{
@@ -65,11 +77,11 @@ namespace BATTS.Views
             //}
             //add = 1;
         }
-        private  void AddItemsToUi(object sender, EventArgs e)
+        private void AddItemsToUi(object sender, EventArgs e)
         {
-        // var TeamsDB = await TVM.GetTeamAsync();
-         
-            
+            // var TeamsDB = await TVM.GetTeamAsync();
+            TVM.LoadItemsCommand.Execute(null);
+
             //Logic for teams from database
             var Teams = new List<string>();
             //Teams.Add(Team.Text);
@@ -213,8 +225,28 @@ namespace BATTS.Views
 
         }
 
-        public void RemoveTeam(object sender, EventArgs e)
+        public async void RemoveTeam(object sender, EventArgs e)
         {
+            try
+            {
+                // TeamName.Text;
+               string teamid = await TVM.GetTeamIDAsync(TeamName.Text, TeamCity.Text);
+                if(teamid == "NTE")
+                {
+                    Notify.Text = "No Team Found";
+                }
+                if(teamid == "NCE")
+                {
+                    Notify.Text = "No City Found for Team";
+                }
+                bool worked = await TVM.DeleteTeamAsync(teamid);
+                TVM.LoadItemsCommand.Execute(null);
+
+            }
+            catch
+            {
+                Notify.Text = "Failed to remove team, try again";
+            }
             Button ClickedButton = (Button)sender;
             //var position = Team.CursorPosition;
             //if (Team.Text == null)
