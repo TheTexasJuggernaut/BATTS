@@ -30,12 +30,16 @@
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
+                                    <Label Text="{Binding Id}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Entry x:Name="PlayerID" />
+                <Entry x:Name="PlayerID" Placeholder="Enter Player ID"/>
             <Button Grid.Row="1" Text = "Add Player" Clicked="AddPlayer" />
             <Button Grid.Row="2" Text = "Remove Player" Clicked="RemovePlayer" />
            <!-- <Button Grid.Row="3" Text = "Refresh" Clicked="AddItemsToUi" /> -->
