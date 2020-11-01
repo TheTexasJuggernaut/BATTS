@@ -34,12 +34,7 @@ namespace BATTS.Views
         async public void DoRegister(object sender, EventArgs e)
         {
 
-            //Check if email already exists
-
-            //If it does alert user
-
-
-            //if not create user and add to DB
+           
 
             if (firstname.Text != ""  && firstname.Text != null && firstname.Text != "First Name")
             {

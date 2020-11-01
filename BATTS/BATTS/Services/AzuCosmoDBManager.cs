@@ -377,7 +377,7 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task InsertPlayerData(PlayerDataModel item)
         {
-            if (!await Initialize())
+            if (!await InitializePlayers())
                 return;
 
             await docClient3.CreateDocumentAsync(
@@ -392,7 +392,7 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task DeletePlayerData(PlayerDataModel item)
         {
-            if (!await Initialize())
+            if (!await InitializePlayers())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
@@ -406,7 +406,7 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task UpdatePlayerData(PlayerDataModel item)
         {
-            if (!await Initialize())
+            if (!await InitializePlayers())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);

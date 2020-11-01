@@ -40,9 +40,7 @@ namespace BATTS.Models
 
                 HandlePropertyChanged();
             }
-        }
-
-       
+        }      
 
         string _lastname;
         [JsonProperty("lastname")]
@@ -135,8 +133,7 @@ namespace BATTS.Models
 
                 HandlePropertyChanged();
             }
-        }
-            
+        }           
 
         bool _activeuser;
         [JsonProperty("activeuser")]

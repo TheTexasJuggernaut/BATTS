@@ -127,32 +127,30 @@ namespace BATTS.ViewModels
      
         }
 
-        public async Task<PlayerDataModel> CreateNewPlayerAsync()
+        public async Task<bool> CreateNewPlayerAsync(PlayerDataModel player, bool IsNew)
         {
-            //Temp Fix
-            Player.FirstName = "";
-            Player.LastName = "";
-            Player.TeamID = "";
-            Player.Id = "";
-            // Player.FirstName = "Richard";
-            // Player.LastName = "Sims";
-            // Player.Role = "Shortstop";
-            //  Player.ActiveUser = true;
-
-
+            Player = player;
+            Player.CoachID = sessionID;
             try
             {
-                await AzuCosmoDBManager.InsertPlayerData(Player);
-
-                return Player;
-
+                if (IsNew)
+                {
+                    await AzuCosmoDBManager.InsertPlayerData(Player);
+                }
+                else
+                {
+                    await AzuCosmoDBManager.UpdatePlayerData(Player);
+                }
+                return true;
+                
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                return null;
+                return false;
+               
             }
-
+        
 
         }
 
@@ -186,9 +184,7 @@ namespace BATTS.ViewModels
                 return false;
             }
 
-        }
-
-    
+        }    
 
         public async Task<string> GetPlayerIDAsync(string playerID)
         {

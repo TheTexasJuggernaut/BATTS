@@ -5,7 +5,8 @@
     <ContentPage.Content>
         <StackLayout>
                 <Button Text="Tutorial" Clicked="DoTutorial" />
-                <Button Text = "ViewTeams" Clicked="ViewTeams"  />
+                <Button Text = "View Teams" Clicked="ViewTeams"  />
+                <Button Text = "Create Player" Clicked="CreatePlayer"  />
                 <Button Text = "Go Back" Clicked="GoBack"/>
         </StackLayout>
     </ContentPage.Content>

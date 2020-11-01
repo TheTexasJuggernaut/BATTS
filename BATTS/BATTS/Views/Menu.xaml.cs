@@ -35,6 +35,11 @@ namespace BATTS.Views
             //SetContentView(Resource.Layout.Tutorial);
             await Navigation.PushModalAsync(new NavigationPage(new TutorialPage(sessionID)));
         }
+        async public void CreatePlayer(object sender, EventArgs e)
+        {
+            
+            await Navigation.PushModalAsync(new NavigationPage(new PlayerInfo(sessionID)));
+        }
         async public void GoBack(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));

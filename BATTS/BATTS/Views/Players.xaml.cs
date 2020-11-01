@@ -54,7 +54,7 @@ namespace BATTS.Views
         private async void AddItemsToUi(object sender, EventArgs e)
         {
             PVM.LoadItemsCommand.Execute(null);
-            await PVM.CreateNewPlayerAsync();
+            //await PVM.CreateNewPlayerAsync();
             var players = new List<string>();
            
 
