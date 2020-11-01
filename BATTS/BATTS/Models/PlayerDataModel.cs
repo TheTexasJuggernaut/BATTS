@@ -105,6 +105,21 @@ namespace BATTS.Models
                 HandlePropertyChanged();
             }
         }
+        string _coachID;
+        [JsonProperty("coachID")]
+        public string CoachID
+        {
+            get => _coachID;
+            set
+            {
+                if (_coachID == value)
+                    return;
+
+                _coachID = value;
+
+                HandlePropertyChanged();
+            }
+        }
 
         string _password;
         [JsonProperty("password")]

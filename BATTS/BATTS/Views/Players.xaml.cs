@@ -23,162 +23,40 @@ namespace BATTS.Views
     public partial class Players : ContentPage
 	{
         PlayersViewModel PVM;
-        public string sessionID;
+        public string sessionID, teamID;
         PlayerDataModel Player= new PlayerDataModel();
         public int remove = 0;
         public int add = 0;
-        public Players (string SessionID)
+        public Players (string TeamId, string SessionID)
 		{
             InitializeComponent();
             sessionID = SessionID;
-            BindingContext = PVM = new PlayersViewModel(sessionID);
+            teamID = TeamId;
+            BindingContext = PVM = new PlayersViewModel(teamID);
             PVM.Title = "Teams Page";
 
         }
+        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        {
+            var player = args.SelectedItem as PlayerDataModel;
+            if (player == null)
+                return;
+
+            await Navigation.PushAsync(new Players(player.TeamID,player.Id));
+
+            // Manually deselect item.
+            //ItemsListView.SelectedItem = null;
+        }
         async public void GoBack(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new Teams("test")));
+            await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
         }
-        private void AddItemsToUi(object sender, EventArgs e)
+        private async void AddItemsToUi(object sender, EventArgs e)
         {
             PVM.LoadItemsCommand.Execute(null);
-
+            await PVM.CreateNewPlayerAsync();
             var players = new List<string>();
-           // players.Add("John J");
-          //  players.Add("Johnathan Robins");
-          //  players.Add("Hunter Woes");
-         //   players.Add("Chase Chear");
-            
-            //if (remove == 0 && add == 0)
-            //{
-            //    if (Player.Text == null)
-            //    {
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if (remove == 1 && add == 0)
-            //{
-            //    if (Player.Text == null)
-            //    {
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (var item in players)
-            //        {
-            //            if (Player.Text == item)
-            //            {
-            //                players.Remove(Player.Text);
-            //            }
-            //        }
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if (remove == 0 && add == 1)
-            //{
-            //    if (Player.Text == null)
-            //    {
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        players.Add(Player.Text);
-            //        foreach (var item in players)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            PlayersViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if (remove == 1 && add == 1)
-            //{
-            //    remove = 0;
-            //    add = 0;
-            //}
+           
 
 
         }
@@ -200,7 +78,7 @@ namespace BATTS.Views
 
             }
                        
-            await PVM.AddPlayerToTeamAsync(sessionID, Player.Id);
+            await PVM.AddPlayerToTeamAsync(teamID, Player.Id);
             PVM.LoadItemsCommand.Execute(null);
             Button ClickedButton = (Button)sender;
            // var position = Player.CursorPosition;
@@ -213,7 +91,7 @@ namespace BATTS.Views
             {
                 // TeamName.Text;
                 string playerid = PlayerID.Text.ToString();
-                string playerretrun = await PVM.GetPlayerIDAsync(sessionID);
+                string playerretrun = await PVM.GetPlayerIDAsync(teamID);
                 if (playerid == "NTE")
                 {
                    // Notify.Text = "No Team Found";

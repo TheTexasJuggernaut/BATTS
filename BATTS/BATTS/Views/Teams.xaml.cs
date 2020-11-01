@@ -43,7 +43,7 @@ namespace BATTS.Views
             if (team == null)
                 return;
 
-          await Navigation.PushAsync(new Players(team.Id));
+          await Navigation.PushAsync(new Players(team.Id,sessionID));
 
             // Manually deselect item.
             //ItemsListView.SelectedItem = null;
@@ -259,7 +259,7 @@ namespace BATTS.Views
         {
             Button ClickedButton = (Button)sender;
             ClickedButton.Text = "You clicked team:" + ClickedButton.StyleId;
-            await Navigation.PushModalAsync(new NavigationPage(new Players(sessionID)));
+           //await Navigation.PushModalAsync(new NavigationPage(new Players(team.Id, sessionID)));
         }
         protected override void OnAppearing()
         {

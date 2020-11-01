@@ -47,7 +47,7 @@ namespace BATTS.ViewModels
             try
             {
                 // TeamDB.Clear();
-                var items = await AzuCosmoDBManager.GetPlayerData();
+                var items = await AzuCosmoDBManager.GetPlayerData(sessionID);
                 foreach (var item in items)
                 {
                     PlayerDB.Add(item);
@@ -68,9 +68,9 @@ namespace BATTS.ViewModels
 
             try
             {
-                var players = await AzuCosmoDBManager.GetPlayerData();
+                PlayerDB = await AzuCosmoDBManager.GetPlayerData(sessionID);
 
-                if (players.Exists(x => x.TeamID== sessionID))
+                if (PlayerDB.Exists(x => x.TeamID== sessionID))
                 {
                     var Player = PlayerDB.Where(p => p.TeamID == sessionID).First();
                     //foreach (var item in Player)
@@ -97,22 +97,52 @@ namespace BATTS.ViewModels
 
         public async Task<PlayerDataModel> AddPlayerToTeamAsync(string teamId, string playerID)
         {
+            PlayerDB = await AzuCosmoDBManager.GetPlayerDataByID(playerID);
+            if (PlayerDB.Exists(x => x.Id == playerID))
+            {
+                var Data = PlayerDB.Where(p => p.Id == playerID).First();
+                // Player.FirstName = Data.FirstName;
+                // Player.TeamID = Data.TeamID;
+                Data.TeamID = teamId;
+                Data.Id = playerID;
+               // Player.Id = Data.Id;
+                try
+                {
+                    await AzuCosmoDBManager.UpdatePlayerData(Data);
+
+                    return Player;
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return null;
+                }
+                
+            }
+            else
+            {
+                return null;
+            }
+     
+        }
+
+        public async Task<PlayerDataModel> CreateNewPlayerAsync()
+        {
             //Temp Fix
-           // Team.OwnerID = sessionID;
-           // Team.TeamName = name;
-           // Team.LocationCity = location;
-          //  Team.ActiveTeam = true;
-            Player.TeamID = teamId;
-            Player.Id = playerID;
-           // Player.FirstName = "Richard";
-           // Player.LastName = "Sims";
-           // Player.Role = "Shortstop";
-          //  Player.ActiveUser = true;
+            Player.FirstName = "";
+            Player.LastName = "";
+            Player.TeamID = "";
+            Player.Id = "";
+            // Player.FirstName = "Richard";
+            // Player.LastName = "Sims";
+            // Player.Role = "Shortstop";
+            //  Player.ActiveUser = true;
 
 
             try
             {
-                await AzuCosmoDBManager.UpdatePlayerData(Player);
+                await AzuCosmoDBManager.InsertPlayerData(Player);
 
                 return Player;
 
@@ -126,27 +156,39 @@ namespace BATTS.ViewModels
 
         }
 
-        public async Task<bool> RemovePlayerFromTeamAsync(string playerid)
+        public async Task<bool> RemovePlayerFromTeamAsync(string playerID)
         {
-
-            Player.Id = playerid;
-            Player.TeamID = "null";
-
-            try
+            PlayerDB = await AzuCosmoDBManager.GetPlayerDataByID(playerID);
+            if (PlayerDB.Exists(x => x.Id == playerID))
             {
-                await AzuCosmoDBManager.UpdatePlayerData(Player);
+                var Data = PlayerDB.Where(p => p.Id == playerID).First();
+                // Player.FirstName = Data.FirstName;
+                // Player.TeamID = Data.TeamID;
+                Data.TeamID = "";
+                Data.Id = playerID;
+                // Player.Id = Data.Id;
+                try
+                {
+                    await AzuCosmoDBManager.UpdatePlayerData(Data);
 
-                return true;
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return false;
+                }
 
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex);
                 return false;
             }
 
-
         }
+
+    
 
         public async Task<string> GetPlayerIDAsync(string playerID)
         {
@@ -155,7 +197,7 @@ namespace BATTS.ViewModels
 
             try
             {
-                PlayerDB = await AzuCosmoDBManager.GetPlayerData();
+                PlayerDB = await AzuCosmoDBManager.GetPlayerData(sessionID);
 
                 if (PlayerDB.Exists(x => x.Id == playerID))
                 {

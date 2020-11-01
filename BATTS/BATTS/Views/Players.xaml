@@ -5,7 +5,37 @@
     <ContentPage.Content>
         <ScrollView>
         <StackLayout x:Name="PlayersViews">
-            <Entry x:Name="PlayerID" />
+                <ListView Grid.Row="1" x:Name="ItemsListView"
+                ItemsSource="{Binding PlayerDB}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                RefreshCommand="{Binding LoadItemsCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement"
+                ItemSelected="OnItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="1">
+                                    <Label Text="{Binding FirstName, StringFormat=' {0}'}"  
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                    <Label Text="{Binding LastName}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                    <Label Text="{Binding Role}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Entry x:Name="PlayerID" />
             <Button Grid.Row="1" Text = "Create Player" Clicked="AddPlayer" />
             <Button Grid.Row="2" Text = "Remove Player" Clicked="RemovePlayer" />
             <Button Grid.Row="3" Text = "Refresh" Clicked="AddItemsToUi" />
