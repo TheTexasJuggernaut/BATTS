@@ -24,11 +24,10 @@ namespace BATTS.Views
     {
         TeamsViewModel TVM;
         public string sessionID;
-        public int remove = 0;
-        public int add = 0;
         TeamDataModel Team = new TeamDataModel();
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
         //public Teams() { InitializeComponent(); }
+
         public Teams (string SessionID)
 		{
             InitializeComponent();
@@ -40,11 +39,11 @@ namespace BATTS.Views
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as TeamDataModel;
-            if (item == null)
+            var team = args.SelectedItem as TeamDataModel;
+            if (team == null)
                 return;
 
-          await Navigation.PushAsync(new Players());
+          await Navigation.PushAsync(new Players(team.Id));
 
             // Manually deselect item.
             //ItemsListView.SelectedItem = null;
@@ -65,9 +64,10 @@ namespace BATTS.Views
             {
 
             }
-            var passer = Team;
+         
             //TeamName.Text
             await TVM.AddTeamAsync(TeamCity.Text, TeamName.Text);
+            TVM.LoadItemsCommand.Execute(null);
             Button ClickedButton = (Button)sender;
             
             //var position = Team.CursorPosition;
@@ -85,10 +85,10 @@ namespace BATTS.Views
             //Logic for teams from database
             var Teams = new List<string>();
             //Teams.Add(Team.Text);
-            Teams.Add("New York Jags");
-            Teams.Add("London Robins");
-            Teams.Add("Mumbai Wolves");
-            Teams.Add("Chicago Bears");
+            //Teams.Add("New York Jags");
+           // Teams.Add("London Robins");
+           // Teams.Add("Mumbai Wolves");
+          //  Teams.Add("Chicago Bears");
 
             //if(remove == 0 && add == 0)
             //{
@@ -259,7 +259,7 @@ namespace BATTS.Views
         {
             Button ClickedButton = (Button)sender;
             ClickedButton.Text = "You clicked team:" + ClickedButton.StyleId;
-            await Navigation.PushModalAsync(new NavigationPage(new Players()));
+            await Navigation.PushModalAsync(new NavigationPage(new Players(sessionID)));
         }
         protected override void OnAppearing()
         {

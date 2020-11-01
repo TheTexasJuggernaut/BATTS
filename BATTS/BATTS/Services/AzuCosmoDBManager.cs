@@ -204,7 +204,32 @@ namespace BATTS.Services
 
             return items;
         }
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<TeamDataModel>> GetTeamDataByID(string ownerID)
+        {
+            var items = new List<TeamDataModel>();
 
+            if (!await InitializeTeams())
+                return items;
+
+            var itemQuery = docClient2.CreateDocumentQuery<TeamDataModel>(
+                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.OwnerID == ownerID)
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<TeamDataModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
 
         // <InsertUserData>        
         /// <summary> 

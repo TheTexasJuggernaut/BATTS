@@ -19,6 +19,7 @@ namespace BATTS.ViewModels
         public List<TeamDataModel> TeamDB { get => teamDB; set => SetProperty(ref teamDB, value); }
 
         public TeamDataModel Team = new TeamDataModel();
+
         public string sessionID;
         public Command LoadItemsCommand { get; set; }
 
@@ -45,10 +46,12 @@ namespace BATTS.ViewModels
             try
             {
                 // TeamDB.Clear();
-                var items = await AzuCosmoDBManager.GetTeamData();
+                var items = new List<TeamDataModel>();
+                 items = await AzuCosmoDBManager.GetTeamData();
                 foreach (var item in items)
                 {
-                    TeamDB.Add(item);
+                   // if (item.OwnerID == sessionID) {
+                        TeamDB.Add(item); //}
                 }
             }
             catch (Exception ex)
@@ -60,30 +63,33 @@ namespace BATTS.ViewModels
                 IsBusy = false;
             }
         }
-        public async Task<TeamDataModel> GetTeamAsync()
+        public async Task<bool> GetTeamAsync()
         {
 
 
             try
             {
-                TeamDB = await AzuCosmoDBManager.GetTeamData();
+               // var items = await AzuCosmoDBManager.GetTeamData();
+                TeamDB = await AzuCosmoDBManager.GetTeamDataByID(sessionID);
 
-                if (TeamDB.Exists(x => x.OwnerID == sessionID))
-                {
-                    var User = TeamDB.Where(p => p.OwnerID == sessionID).First();
+                //if (TeamDB.Exists(x => x.OwnerID == sessionID))
+               // {
+                   
+                   // var User = TeamDB.Where(p => p.OwnerID == sessionID).ToList();
+                    
                     // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
-                    return User;
-                }
-                else
-                {
-                    return null;
-                }
+                    return true ;
+               // }
+               // else
+               // {
+                  //  return false;
+             //   }
 
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                return null;
+                return false;
             }
 
 
