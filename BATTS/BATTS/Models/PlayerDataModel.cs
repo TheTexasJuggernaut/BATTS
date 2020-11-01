@@ -42,21 +42,7 @@ namespace BATTS.Models
             }
         }
 
-        string _teamID;
-        [JsonProperty("teamid")]
-        public string TeamID
-        {
-            get => _teamID;
-            set
-            {
-                if (_teamID == value)
-                    return;
-
-                _teamID = value;
-
-                HandlePropertyChanged();
-            }
-        }
+       
 
         string _lastname;
         [JsonProperty("lastname")]
@@ -89,7 +75,21 @@ namespace BATTS.Models
                 HandlePropertyChanged();
             }
         }
+        string _password;
+        [JsonProperty("password")]
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password == value)
+                    return;
 
+                _password = value;
+
+                HandlePropertyChanged();
+            }
+        }
         string _role;
         [JsonProperty("role")]
         public string Role
@@ -101,6 +101,22 @@ namespace BATTS.Models
                     return;
 
                 _role = value;
+
+                HandlePropertyChanged();
+            }
+        }
+
+        string _teamID;
+        [JsonProperty("teamid")]
+        public string TeamID
+        {
+            get => _teamID;
+            set
+            {
+                if (_teamID == value)
+                    return;
+
+                _teamID = value;
 
                 HandlePropertyChanged();
             }
@@ -120,22 +136,7 @@ namespace BATTS.Models
                 HandlePropertyChanged();
             }
         }
-
-        string _password;
-        [JsonProperty("password")]
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                if (_password == value)
-                    return;
-
-                _password = value;
-
-                HandlePropertyChanged();
-            }
-        }
+            
 
         bool _activeuser;
         [JsonProperty("activeuser")]
@@ -148,6 +149,22 @@ namespace BATTS.Models
                     return;
 
                 _activeuser = value;
+
+                HandlePropertyChanged();
+            }
+        }
+
+        string[] _gameIDs;
+        [JsonProperty("gameIDs")]
+        public string[] GameIDs
+        {
+            get => _gameIDs;
+            set
+            {
+                if (_gameIDs == value)
+                    return;
+
+                _gameIDs = value;
 
                 HandlePropertyChanged();
             }

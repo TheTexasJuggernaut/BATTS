@@ -18,36 +18,27 @@ using System.Windows.Input;
 
 namespace BATTS.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class LoginPage : ContentPage
-	{
-        //Create a list object 10/18/20
-        public List<UserDataModel> LoginDB = new List<UserDataModel>();   
-                       
-              
-        public UserDataModel User { get; set; }
-
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class LoginPage : ContentPage
+    {
         LoginViewModel LVM;
-
-        //public UserDataModel Items = new UserDataModel();
 
         public LoginPage()
         {
             InitializeComponent();
-       
+
             BindingContext = LVM = new LoginViewModel();
             LVM.Title = "Login Page";
         }
 
-      
-
         async public void DoLogin(object sender, EventArgs e)
         {
-            //10/20/20 Repairs
+
             bool IsVerified = await LVM.LoginCheckAsync(email.Text, pwd.Text);
             if (IsVerified)
             {
                 string sessionID = await LVM.GetUserIDAsync(email.Text);
+                // 11/1/20 : S.A. Update this code to utilize the user type to change what they have access to prior to loggin to the application
                 await Navigation.PushModalAsync(new NavigationPage(new Menu(sessionID)));
             }
             else
@@ -56,24 +47,12 @@ namespace BATTS.Views
             }
 
         }
-     
+
         async public void DoRegister(object sender, EventArgs e)
         {
-
-            //  await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-            //Items = new ObservableCollection<UserDataModel>();
             await Navigation.PushModalAsync(new NavigationPage(new Register()));
 
-           // User.Email = email.Text;
-           // User.Password = pwd.Text;
-
-          //  await AzuCosmoDBManager.InsertUserData(User);
-         //   notify.Text = "New User Registered";
-         //   await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-
         }
-
-           
 
         protected override void OnAppearing()
         {
@@ -83,10 +62,10 @@ namespace BATTS.Views
             //{
             //  //  vm.RefreshCommand.Execute(null);
             // //   vm.LoadItemsCommand.Execute(null);
-               
+
             //}
         }
 
-        
+
     }
 }

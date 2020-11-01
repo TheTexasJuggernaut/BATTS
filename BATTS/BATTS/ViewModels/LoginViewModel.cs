@@ -16,13 +16,12 @@ namespace BATTS.ViewModels
     {
         //10/25/20 Creates a model that is shared by functions 
 
-        public string email;
-        public string password;
+        public string email, password;
+
         List<UserDataModel> loginDB;
         public List<UserDataModel> LoginDB { get => loginDB; set => SetProperty(ref loginDB, value); }
 
         public ICommand RefreshCommand { get; }
-               
 
         public LoginViewModel()
         {
@@ -43,31 +42,28 @@ namespace BATTS.ViewModels
             //});
         }
 
-        //10/25/20 MVVM Model Repairs 
-       public async Task<bool> LoginCheckAsync(string Email, string Password)
+        public async Task<bool> LoginCheckAsync(string Email, string Password)
         {
-            email = Email;
-            password = Password;
            
             try
             {
                 LoginDB = await AzuCosmoDBManager.GetUserData();
 
-                if (LoginDB.Exists(x => x.Email == email))
+                if (LoginDB.Exists(x => x.Email == Email))
                 {
-                    var User = LoginDB.Where(p => p.Email == email).First();
+                    var User = LoginDB.Where(p => p.Email == Email).First();
                     // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
-                    if (User.Password == password)
+                    if (User.Password == Password)
                     {
-                        return true;                        
+                        return true;
                     }
                     else
-                    {                        
+                    {
                         return false;
                     }
                 }
                 return false;
-               
+
             }
             catch (Exception ex)
             {
@@ -81,7 +77,7 @@ namespace BATTS.ViewModels
         public async Task<string> GetUserIDAsync(string Email)
         {
             email = Email;
-          
+
 
             try
             {
@@ -91,14 +87,14 @@ namespace BATTS.ViewModels
                 {
                     var User = LoginDB.Where(p => p.Email == email).First();
                     // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
-                   
-                        return User.Id;
+
+                    return User.Id;
                 }
                 else
                 {
                     return "";
                 }
-             
+
 
             }
             catch (Exception ex)
@@ -138,6 +134,7 @@ namespace BATTS.ViewModels
                 IsBusy = false;
             }
         }
+
         async Task ExecuteRefreshCommand()
         {
             if (IsBusy)
