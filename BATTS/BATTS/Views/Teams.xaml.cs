@@ -255,12 +255,7 @@ namespace BATTS.Views
             //}
             //remove = 1;
         }
-        async private void MyButton_Clicked(object sender, EventArgs e)
-        {
-            Button ClickedButton = (Button)sender;
-            ClickedButton.Text = "You clicked team:" + ClickedButton.StyleId;
-           //await Navigation.PushModalAsync(new NavigationPage(new Players(team.Id, sessionID)));
-        }
+       
         protected override void OnAppearing()
         {
             base.OnAppearing();

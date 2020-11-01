@@ -59,13 +59,7 @@ namespace BATTS.Views
            
 
 
-        }
-        private async void MyButton_Clicked(object sender, EventArgs e)
-        {
-            Button ClickedButton = (Button)sender;
-            await Navigation.PushModalAsync(new NavigationPage(new PlayerInfo()));
-            ClickedButton.Text = "Player Stats: (PlaceHolder)";
-        }
+        }        
         public async void AddPlayer(object sender, EventArgs e)
         {
             try

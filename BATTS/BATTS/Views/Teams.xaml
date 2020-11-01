@@ -43,7 +43,7 @@
                 <Entry x:Name="TeamCity"></Entry>
                 <Button Grid.Row="0" Text = "Create Team" Clicked="CreateTeam" />
             <Button Grid.Row="0" Text = "Remove Team" Clicked="RemoveTeam" />
-            <Button Grid.Row="0" Text = "Refresh" Clicked="AddItemsToUi" />
+            <!--<Button Grid.Row="0" Text = "Refresh" Clicked="AddItemsToUi" /> -->
             <Button Grid.Row="0" Text = "Back to Menu" Clicked="GoBack" />
         </StackLayout>
             </ScrollView>

@@ -36,9 +36,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <Entry x:Name="PlayerID" />
-            <Button Grid.Row="1" Text = "Create Player" Clicked="AddPlayer" />
+            <Button Grid.Row="1" Text = "Add Player" Clicked="AddPlayer" />
             <Button Grid.Row="2" Text = "Remove Player" Clicked="RemovePlayer" />
-            <Button Grid.Row="3" Text = "Refresh" Clicked="AddItemsToUi" />
+           <!-- <Button Grid.Row="3" Text = "Refresh" Clicked="AddItemsToUi" /> -->
             <Button Grid.Row="4" Text = "Back to Menu" Clicked="GoBack" />
         </StackLayout>
             </ScrollView>
