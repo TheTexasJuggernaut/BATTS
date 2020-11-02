@@ -25,8 +25,7 @@ namespace BATTS.Views
         PlayersViewModel PVM;
         public string sessionID, teamID;
         PlayerDataModel Player= new PlayerDataModel();
-        public int remove = 0;
-        public int add = 0;
+       
         public Players (string TeamId, string SessionID)
 		{
             InitializeComponent();
@@ -42,7 +41,7 @@ namespace BATTS.Views
             if (player == null)
                 return;
 
-            await Navigation.PushAsync(new Players(player.TeamID,player.Id));
+            await Navigation.PushAsync(new PlayerStats(teamID,player.Id, sessionID));
 
             // Manually deselect item.
             //ItemsListView.SelectedItem = null;

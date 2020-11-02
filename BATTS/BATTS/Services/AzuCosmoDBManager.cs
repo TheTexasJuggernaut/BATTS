@@ -21,6 +21,7 @@ namespace BATTS.Services
         static DocumentClient docClient = null;
         static DocumentClient docClient2 = null;
         static DocumentClient docClient3 = null;
+        static DocumentClient docClient4 = null;
 
 
         static readonly string databaseName = "UserRegistry";
@@ -31,6 +32,8 @@ namespace BATTS.Services
 
         static readonly string databasePlayers = "UserRegistry";
         static readonly string collectionPlayers= "PlayersData";
+        static readonly string databaseGames = "UserRegistry";
+        static readonly string collectionGames = "GameData";
 
         static async Task<bool> Initialize()
         {
@@ -305,7 +308,7 @@ namespace BATTS.Services
             {
                 Debug.WriteLine(ex);
 
-                docClient = null;
+                docClient3 = null;
 
                 return false;
             }
@@ -373,6 +376,7 @@ namespace BATTS.Services
 
         // <InsertUserData>        
         /// <summary> 
+        /// This function 
         /// </summary>
         /// <returns></returns>
         public async static Task InsertPlayerData(PlayerDataModel item)
@@ -416,6 +420,121 @@ namespace BATTS.Services
 
 
         #endregion
+
+        static async Task<bool> InitializeGames()
+        {
+            if (docClient4 != null)
+                return true;
+
+            try
+            {
+                docClient4 = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
+
+                // Create the database - this can also be done through the portal
+                await docClient4.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseGames });
+
+                // Create the collection - make sure to specify the RUs - has pricing implications
+                // This can also be done through the portal
+
+                await docClient4.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databaseGames),
+                    new DocumentCollection { Id = collectionGames },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+
+                docClient4 = null;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        #region Game Models
+        // <GetUserData>
+
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<GameModel>> GetGameData(string GameID)
+        {
+            var items = new List<GameModel>();
+
+            if (!await InitializeGames())
+                return items;
+
+            var itemQuery = docClient4.CreateDocumentQuery<GameModel>(
+                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.GameId == GameID)
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<GameModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
+
+
+        
+
+        // <InsertUserData>        
+        /// <summary> 
+        /// This function 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task InsertGameData(GameModel item)
+        {
+            if (!await InitializeGames())
+                return;
+
+            await docClient4.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                item);
+        }
+        // </InsertToDoItem>  
+
+        // <DeleteUserData>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task DeleteGameData(GameModel item)
+        {
+            if (!await InitializeGames())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
+            await docClient4.DeleteDocumentAsync(docUri);
+        }
+        // </DeleteToDoItem>  
+
+        // <UpdateUserItem>        
+        /// <summary> 
+        /// </summary>
+        /// <returns></returns>
+        public async static Task UpdateGameData(GameModel item)
+        {
+            if (!await InitializeGames())
+                return;
+
+            var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
+            await docClient4.ReplaceDocumentAsync(docUri, item);
+        }
+        // </UpdateToDoItem>  
+
+
+        #endregion
+
 
         //#region Item Model Calls
         //// <GetToDoItems>        
