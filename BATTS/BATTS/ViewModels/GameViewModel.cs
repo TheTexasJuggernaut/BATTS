@@ -19,18 +19,19 @@ namespace BATTS.ViewModels
 
         public GameModel Team = new GameModel();
 
-        public string sessionID;
+        public string sessionID, playerID;
         public Command LoadItemsCommand { get; set; }
 
-        public GameViewModel(string SessionID)
+        public GameViewModel(string PlayerID, string SessionID)
         {
             Title = "Browse";
             sessionID = SessionID;
+            playerID = PlayerID;
 
             GameDB = new List<GameModel>();
 
             // RefreshCommand = new Command(async () => await ExecuteRefreshCommand());
-            LoadItemsCommand = new Command(async () => await GetGameAsync());
+            LoadItemsCommand = new Command(async () => await GetGameIDByPlayerIdAsync(playerID));
             //TeamDB.Clear();
 
         }
@@ -46,7 +47,7 @@ namespace BATTS.ViewModels
             {
                 // TeamDB.Clear();
                 var items = new List<GameModel>();
-                items = await AzuCosmoDBManager.GetGameData(sessionID);
+                items = await AzuCosmoDBManager.GetGameDataByPlayer(playerID);
                 foreach (var item in items)
                 {
                     // if (item.OwnerID == sessionID) {
@@ -179,6 +180,27 @@ namespace BATTS.ViewModels
             {
                 Debug.WriteLine(ex);
                 return "";
+            }
+
+
+        }
+
+        public async Task<bool> GetGameIDByPlayerIdAsync(string playerID)
+        {
+            // email = Email;
+
+
+            try
+            {
+                GameDB = await AzuCosmoDBManager.GetGameDataByPlayer(playerID);
+                return true;               
+
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
             }
 
 

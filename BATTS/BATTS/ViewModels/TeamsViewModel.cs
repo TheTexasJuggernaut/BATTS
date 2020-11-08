@@ -18,6 +18,10 @@ namespace BATTS.ViewModels
         public List<TeamDataModel> teamDB;
         public List<TeamDataModel> TeamDB { get => teamDB; set => SetProperty(ref teamDB, value); }
 
+        public List<TeamDataModel> teamDBID;
+        public List<TeamDataModel> TeamDBID { get => teamDBID; set => SetProperty(ref teamDBID, value); }
+
+
         public TeamDataModel Team = new TeamDataModel();
 
         public string sessionID;
@@ -149,11 +153,11 @@ namespace BATTS.ViewModels
 
             try
             {
-                TeamDB = await AzuCosmoDBManager.GetTeamData();
+                TeamDBID = await AzuCosmoDBManager.GetTeamData();
 
-                if (TeamDB.Exists(x => x.TeamName == name))
+                if (TeamDBID.Exists(x => x.TeamName == name))
                 {
-                    var Team = TeamDB.Where(p => p.TeamName == name).First();
+                    var Team = TeamDBID.Where(p => p.TeamName == name).First();
                     if (Team.LocationCity == city)
                     {
                         return Team.Id;
@@ -178,6 +182,38 @@ namespace BATTS.ViewModels
             {
                 Debug.WriteLine(ex);
                 return "";
+            }
+
+
+        }
+
+        public async Task<int> GetTeamListHeight()
+        {
+
+
+            try
+            {
+                // var items = await AzuCosmoDBManager.GetTeamData();
+                TeamDB = await AzuCosmoDBManager.GetTeamDataByID(sessionID);
+                return TeamDB.Count;
+                //if (TeamDB.Exists(x => x.OwnerID == sessionID))
+                // {
+
+                // var User = TeamDB.Where(p => p.OwnerID == sessionID).ToList();
+
+                // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
+                //return true;
+                // }
+                // else
+                // {
+                //  return false;
+                //   }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return 5;
             }
 
 

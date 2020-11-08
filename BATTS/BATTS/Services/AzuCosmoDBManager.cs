@@ -485,8 +485,34 @@ namespace BATTS.Services
             return items;
         }
 
+        /// <summary>
+        /// Pulls the data from the User Data Model databse and stores into a list
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<List<GameModel>> GetGameDataByPlayer(string PlayerID)
+        {
+            var items = new List<GameModel>();
 
-        
+            if (!await InitializeGames())
+                return items;
+
+            var itemQuery = docClient4.CreateDocumentQuery<GameModel>(
+                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(item => item.PlayerIDs == PlayerID)
+                .AsDocumentQuery();
+
+            while (itemQuery.HasMoreResults)
+            {
+                var queryResults = await itemQuery.ExecuteNextAsync<GameModel>();
+
+                items.AddRange(queryResults);
+            }
+
+            return items;
+        }
+
+
 
         // <InsertUserData>        
         /// <summary> 

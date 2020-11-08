@@ -23,8 +23,10 @@ namespace BATTS.Views
     {
         public bool gameexist, datasaved;
         GameViewModel GVM;
+        //PlayersViewModel PVM;
         public string sessionID, playerID, teamID;
         GameModel Game = new GameModel();
+       
 
         public PlayerStats(string teamid, string playerid, string SessionID)
         {
@@ -32,7 +34,7 @@ namespace BATTS.Views
             sessionID = SessionID;
             teamID = teamid;
             playerID = playerid;
-            BindingContext = GVM = new GameViewModel(sessionID);
+            BindingContext = GVM = new GameViewModel(playerID, sessionID);
             GVM.Title = "Teams Page";
         }
         async public void SaveData(object sender, EventArgs e)
@@ -48,6 +50,7 @@ namespace BATTS.Views
                 Game.Strikes = Int32.Parse(Strikes.Text);
                 Double BattingAVG = Game.Hits / Game.AttemptedHits;
               
+             
                
             }
             catch
@@ -85,11 +88,24 @@ namespace BATTS.Views
             }
             //GVM.LoadItemsCommand.Execute(null);
             //await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
+            GVM.LoadItemsCommand.Execute(null);
         }
 
         async public void GoBack(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new Players(teamID,sessionID)));
+        }
+
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (GVM.GameDB.Count == 0)
+            {
+                //TVM.RefreshCommand.Execute(null);
+                GVM.LoadItemsCommand.Execute(null);
+            }
         }
     }
 }

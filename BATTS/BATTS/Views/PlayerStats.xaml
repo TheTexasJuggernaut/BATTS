@@ -5,6 +5,7 @@
              Title="{Binding Title}"
              x:Name="PlayerStatsPage">
     <ContentPage.Content>
+        <ScrollView>
         <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -12,9 +13,45 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackLayout Grid.Row="0">
+                <ListView Grid.Row="1" x:Name="ItemsListView"
+                ItemsSource="{Binding GameDB}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                RefreshCommand="{Binding LoadItemsCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation ="Horizontal" Padding="1">
+                                    <Label Text="{Binding GameId, StringFormat=' The game ID : {0}'}"  
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" />
+                                    <Label Text="{Binding Hits,StringFormat=' Hit total is : {0}'}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                        <Label Text="{Binding AttemptedHits,StringFormat=' Attempted Hit total is : {0}'}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                        <Label Text="{Binding Strikes,StringFormat=' Strike total is : {0}'}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                        <Label Text="{Binding Runs,StringFormat=' Run total is : {0}'}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Label Text="Please fill in each field" />
                 <Label x:Name="notify" Text="{Binding Valid, Mode=TwoWay}" />
-
                 <Entry x:Name="GameID" Text="{Binding Id, Mode=TwoWay}"
                        Placeholder="Enter GameID" />
                 <Entry x:Name="AttemptedHits" Text="{Binding AttemptedHits, Mode=TwoWay}"
@@ -31,5 +68,6 @@
                 <Button Grid.Row="2" Text = "Back" Clicked="GoBack" />
             </StackLayout>
         </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

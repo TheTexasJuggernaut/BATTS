@@ -9,7 +9,7 @@
         <ScrollView>
         <StackLayout x:Name="TeamViews">
                 <Label x:Name="Notify"></Label>
-                <ListView Grid.Row="1" x:Name="ItemsListView"
+                <ListView Grid.Row="0" x:Name="ItemsListView"
                 ItemsSource="{Binding TeamDB}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
@@ -21,30 +21,30 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <StackLayout Padding="1">
-                                    <Label Text="{Binding TeamName, StringFormat=' {0}'}"  
+                                <StackLayout Orientation="Horizontal" Padding="1">
+                                    <Label Text="{Binding LocationCity, StringFormat='{0}'}"  
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" />
-                                    <Label Text="{Binding LocationCity}" 
+                                FontSize="20" />
+                                    <Label Text="{Binding TeamName, StringFormat=' {0}'}" 
                                 LineBreakMode="NoWrap"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />
+                                Style="{DynamicResource ListItemTextStyle}"
+                                FontSize="20" />
                                     <Label Text="{Binding LocationState}" 
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />                                    
+                                FontSize="16" />                                    
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Entry x:Name="TeamName"></Entry>
-                <Entry x:Name="TeamCity"></Entry>
-                <Button Grid.Row="0" Text = "Create Team" Clicked="CreateTeam" />
-            <Button Grid.Row="0" Text = "Remove Team" Clicked="RemoveTeam" />
+                <Entry x:Name="TeamName" Grid.Row="1"  Placeholder="Enter Team/Mascot Name"></Entry>
+                <Entry x:Name="TeamCity" Grid.Row="1"  Placeholder="Enter City Name"></Entry>
+                <Button Grid.Row="1" Text = "Create Team" Clicked="CreateTeam" />
+            <Button Grid.Row="1" Text = "Remove Team" Clicked="RemoveTeam" />
             <!--<Button Grid.Row="0" Text = "Refresh" Clicked="AddItemsToUi" /> -->
-            <Button Grid.Row="0" Text = "Back to Menu" Clicked="GoBack" />
+            <Button Grid.Row="1" Text = "Back to Menu" Clicked="GoBack" />
         </StackLayout>
             </ScrollView>
     </ContentPage.Content>

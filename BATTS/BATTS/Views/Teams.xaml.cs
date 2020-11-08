@@ -240,14 +240,15 @@ namespace BATTS.Views
                     Notify.Text = "No City Found for Team";
                 }
                 bool worked = await TVM.DeleteTeamAsync(teamid);
-                TVM.LoadItemsCommand.Execute(null);
+              
 
             }
             catch
             {
                 Notify.Text = "Failed to remove team, try again";
             }
-            Button ClickedButton = (Button)sender;
+            TVM.LoadItemsCommand.Execute(null);
+            //Button ClickedButton = (Button)sender;
             //var position = Team.CursorPosition;
             //if (Team.Text == null)
             //{
@@ -265,6 +266,7 @@ namespace BATTS.Views
                 //TVM.RefreshCommand.Execute(null);
                 TVM.LoadItemsCommand.Execute(null);
             }
+            ItemsListView.HeightRequest = 10;
         }
 
     }

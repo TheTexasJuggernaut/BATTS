@@ -17,7 +17,7 @@
                 
                 <Entry x:Name="firstname" Text="{Binding FirstName, Mode=TwoWay}"
                        Placeholder="First Name" />                
-                <Entry x:Name="lastname" Text="{Binding Last Name, Mode=TwoWay}"
+                <Entry x:Name="lastname" Text="{Binding LastName, Mode=TwoWay}"
                        Placeholder="Last Name"/>                
                 <Entry x:Name="email" Text="{Binding Email, Mode=TwoWay}"
                      Placeholder="Email"/>
