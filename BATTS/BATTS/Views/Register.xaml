@@ -21,8 +21,20 @@
                        Placeholder="Last Name"/>                
                 <Entry x:Name="email" Text="{Binding Email, Mode=TwoWay}"
                      Placeholder="Email"/>
-                <Entry x:Name="role" Text="{Binding Role, Mode=TwoWay}"
-                     Placeholder="Role"/>
+                <!--<Entry x:Name="role" Text="{Binding Role, Mode=TwoWay}"
+                     Placeholder="Role"/> -->
+                <!--SelectedIndexChanged="OnRolePickerChanged" -->
+                <Picker x:Name="rolepicker" Title="Select a role:" >
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Coach</x:String>
+                            <x:String>Player</x:String>
+                            <x:String>Legal Guardian</x:String>
+                            <x:String>League Official</x:String>
+                            <x:String>Admin</x:String>                            
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
                 <Entry x:Name="password" Text="{Binding Password, Mode=TwoWay}"
                      Placeholder="Password"
                      IsPassword="True" />

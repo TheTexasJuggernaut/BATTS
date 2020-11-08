@@ -19,7 +19,7 @@ namespace BATTS.Views
 	{
         public List<UserDataModel> LoginDBRegister = new List<UserDataModel>();
 
-
+        public bool IsValidEmail;
         public UserDataModel UserRegister = new UserDataModel();
 
         RegisterViewModel RVM;
@@ -50,7 +50,9 @@ namespace BATTS.Views
                 UserRegister.FirstName = firstname.Text.ToString();
                 UserRegister.LastName = lastname.Text.ToString();
                 UserRegister.Email = email.Text.ToString();
-                UserRegister.Role = role.Text.ToString();
+                IsValidEmail =RVM.IsValidEmail(UserRegister.Email);
+                // UserRegister.Role = role.Text.ToString();
+                UserRegister.Role = rolepicker.SelectedItem.ToString();
                 UserRegister.Password = password.Text.ToString();
                 UserRegister.ActiveUser = true;
             }
@@ -58,9 +60,17 @@ namespace BATTS.Views
             {
 
             }
-            if (emailexist == false) { 
+            if (IsValidEmail == false)
+            {
+                email.TextColor = Color.Red;
+                notify.TextColor = Color.Red;
+                email.Text = "Email Not Valid";
+                notify.Text = "This email is not a valid email";
+            }
+            else if (emailexist == false) { 
            await RVM.RegisterNewUserAsync(UserRegister,true);
                 notify.TextColor = Color.Green;
+                email.TextColor = Color.Green;
                 notify.Text = "User now registered go back to login";
 
             }
@@ -72,16 +82,7 @@ namespace BATTS.Views
                 notify.Text = "This email is already registered";
                
             }
-            //  await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-            //Items = new ObservableCollection<UserDataModel>();
-           // await Navigation.PushModalAsync(new NavigationPage(new Register()));
-
-            // User.Email = email.Text;
-            // User.Password = pwd.Text;
-
-            //  await AzuCosmoDBManager.InsertUserData(User);
-            //   notify.Text = "New User Registered";
-            //   await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+           
 
         }
         async public void GoBack(object sender, EventArgs e)

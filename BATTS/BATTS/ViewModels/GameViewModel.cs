@@ -96,13 +96,6 @@ namespace BATTS.ViewModels
 
         public async Task<bool> AddGameAsync(GameModel Game, bool gameexists)
         {
-            //Temp Fix
-           // Team.OwnerID = sessionID;
-          //  Team.TeamName = name;
-          //  Team.LocationCity = location;
-          //  Team.ActiveTeam = true;
-
-
 
             try
             {
@@ -113,7 +106,7 @@ namespace BATTS.ViewModels
                     await AzuCosmoDBManager.UpdateGameData(Game);
 
 
-               
+
 
                 return true;
 
@@ -160,7 +153,7 @@ namespace BATTS.ViewModels
                 if (GameDB.Exists(x => x.GameId == gameID))
                 {
                     var Game = GameDB.Where(p => p.PlayerIDs == playerID);
-                    foreach(var s in Game)
+                    foreach (var s in Game)
                     {
                         if (s.GameId == gameID)
                         {
@@ -169,8 +162,8 @@ namespace BATTS.ViewModels
                         }
                     }
                     return "GEPDNE";
-                        //Player already exists
-                    
+                    //Player already exists
+
                     // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
 
                     //return User.Id;
@@ -191,45 +184,6 @@ namespace BATTS.ViewModels
 
         }
 
-        //public async Task<string> GetTeamIDAsync(string name, string city)
-        //{
-        //    // email = Email;
 
-
-        //    try
-        //    {
-        //        TeamDB = await AzuCosmoDBManager.GetTeamData();
-
-        //        if (TeamDB.Exists(x => x.TeamName == name))
-        //        {
-        //            var Team = TeamDB.Where(p => p.TeamName == name).First();
-        //            if (Team.LocationCity == city)
-        //            {
-        //                return Team.Id;
-
-        //            }
-        //            else
-        //            {
-        //                return "NCE";
-        //            }
-        //            // if (LoginDB.Exists(x => x.Password == password))//Need to ensure it is only for that Data Table
-
-        //            //return User.Id;
-        //        }
-        //        else
-        //        {
-        //            return "NTE";
-        //        }
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(ex);
-        //        return "";
-        //    }
-
-
-        //}
     }
 }

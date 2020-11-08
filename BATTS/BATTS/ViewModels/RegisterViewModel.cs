@@ -16,7 +16,7 @@ namespace BATTS.ViewModels
     class RegisterViewModel : BaseViewModel
     {
         public string email;
-        public string password;
+        //public string password;
         List<UserDataModel> loginDB;
         public List<UserDataModel> LoginDB { get => loginDB; set => SetProperty(ref loginDB, value); }
 
@@ -83,6 +83,18 @@ namespace BATTS.ViewModels
             return false;
 
 
+        }
+       public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
