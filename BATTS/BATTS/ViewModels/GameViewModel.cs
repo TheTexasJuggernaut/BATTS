@@ -187,13 +187,25 @@ namespace BATTS.ViewModels
 
         public async Task<bool> GetGameIDByPlayerIdAsync(string playerID)
         {
-            // email = Email;
+
 
 
             try
             {
                 GameDB = await AzuCosmoDBManager.GetGameDataByPlayer(playerID);
-                return true;               
+                GameDB.Sort();
+
+                //
+                var teamAverageScores =
+                 from player in GameDB
+                    group player by player.Runs into playerGroup
+                      select new
+                     {
+                          GameId = playerGroup.Key,
+                          AverageScore = playerGroup.Average(x => x.Runs),
+                     };
+                //
+                     return true;
 
 
             }

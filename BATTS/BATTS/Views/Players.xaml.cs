@@ -61,21 +61,33 @@ namespace BATTS.Views
         }        
         public async void AddPlayer(object sender, EventArgs e)
         {
-            try
+            bool check = true;
+            if (check == (String.IsNullOrWhiteSpace(PlayerID.Text)))
             {
-                Player.Id = PlayerID.Text.ToString();
-                
+                //Notify.Text = "Please fill in all data entries";
+                // notify.TextColor = Color.Red;
+                PlayerID.Text = null;
+                //lastname.Text = null;
+                // Position.Text = null;
             }
-            catch
+            else
             {
+                try
+                {
+                    Player.Id = PlayerID.Text.ToString();
 
+                }
+                catch
+                {
+
+                }
+
+                await PVM.AddPlayerToTeamAsync(teamID, Player.Id);
+                PVM.LoadItemsCommand.Execute(null);
+                Button ClickedButton = (Button)sender;
+                // var position = Player.CursorPosition;
+                //  add = 1;
             }
-                       
-            await PVM.AddPlayerToTeamAsync(teamID, Player.Id);
-            PVM.LoadItemsCommand.Execute(null);
-            Button ClickedButton = (Button)sender;
-           // var position = Player.CursorPosition;
-          //  add = 1;
         }
         public async void RemovePlayer(object sender, EventArgs e)
         {

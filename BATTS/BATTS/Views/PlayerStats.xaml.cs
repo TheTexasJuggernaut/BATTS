@@ -39,56 +39,70 @@ namespace BATTS.Views
         }
         async public void SaveData(object sender, EventArgs e)
         {
-            try
+            bool check = true;
+            if (check == (String.IsNullOrWhiteSpace(GameID.Text)) || (String.IsNullOrWhiteSpace(AttemptedHits.Text)) || (String.IsNullOrWhiteSpace(Hits.Text)))
             {
-               
-                Game.GameId = GameID.Text;
-                Game.PlayerIDs = playerID;
-                Game.AttemptedHits = Int32.Parse(AttemptedHits.Text);
-                Game.Hits = Int32.Parse(Hits.Text);
-                Game.Runs = Int32.Parse(Runs.Text);
-                Game.Strikes = Int32.Parse(Strikes.Text);
-                Double BattingAVG = Game.Hits / Game.AttemptedHits;
-              
-             
-               
-            }
-            catch
-            {
-
-            }
-         
-            string game = await GVM.GetGameIDAsync(Game.GameId, Game.PlayerIDs);
-            Game.Id = game; 
-            gameexist = true;
-           
-            if(game =="GEPDNE")
-            {
-                
-                gameexist = false;
-                Game.Id = "";
-            }
-            if(game == "GDNE")
-            {
-                gameexist = false;
-                Game.Id = "";
-            }
-
-             datasaved = await GVM.AddGameAsync(Game, gameexist);
-
-            if (datasaved)
-            {
-                notify.TextColor = Color.Green;
-                notify.Text = "Data Saved";
+                //Notify.Text = "Please fill in all data entries";
+                // notify.TextColor = Color.Red;
+                GameID.Text = null;
+                AttemptedHits.Text = null;
+                Hits.Text = null;
+                //lastname.Text = null;
+                // Position.Text = null;
             }
             else
             {
-                notify.TextColor = Color.Red;
-                notify.Text = "Data Failed";
+                try
+                {
+
+                    Game.GameId = GameID.Text;
+                    Game.PlayerIDs = playerID;
+                    Game.AttemptedHits = Int32.Parse(AttemptedHits.Text);
+                    Game.Hits = Int32.Parse(Hits.Text);
+                    Game.Runs = Int32.Parse(Runs.Text);
+                    Game.Strikes = Int32.Parse(Strikes.Text);
+                    Double BattingAVG = Convert.ToDouble(Game.Hits / Game.AttemptedHits);
+
+
+
+                }
+                catch
+                {
+
+                }
+
+                string game = await GVM.GetGameIDAsync(Game.GameId, Game.PlayerIDs);
+                Game.Id = game;
+                gameexist = true;
+
+                if (game == "GEPDNE")
+                {
+
+                    gameexist = false;
+                    Game.Id = "";
+                }
+                if (game == "GDNE")
+                {
+                    gameexist = false;
+                    Game.Id = "";
+                }
+
+                datasaved = await GVM.AddGameAsync(Game, gameexist);
+
+                if (datasaved)
+                {
+                    notify.TextColor = Color.Green;
+                    notify.Text = "Data Saved";
+                }
+                else
+                {
+                    notify.TextColor = Color.Red;
+                    notify.Text = "Data Failed";
+                }
+                //GVM.LoadItemsCommand.Execute(null);
+                //await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
+                GVM.LoadItemsCommand.Execute(null);
             }
-            //GVM.LoadItemsCommand.Execute(null);
-            //await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
-            GVM.LoadItemsCommand.Execute(null);
         }
 
         async public void GoBack(object sender, EventArgs e)
@@ -106,6 +120,7 @@ namespace BATTS.Views
                 //TVM.RefreshCommand.Execute(null);
                 GVM.LoadItemsCommand.Execute(null);
             }
+           
         }
     }
 }

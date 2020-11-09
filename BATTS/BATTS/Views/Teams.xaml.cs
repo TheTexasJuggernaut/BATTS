@@ -55,27 +55,40 @@ namespace BATTS.Views
         }
         public async void CreateTeam(object sender, EventArgs e)
         {
-            try
-            {
-                Team.TeamName = TeamName.Text.ToString();
-                Team.LocationCity = TeamCity.Text.ToString();
-            }
-            catch
-            {
 
+            bool check = true;
+            if (check == (String.IsNullOrWhiteSpace(TeamName.Text) || String.IsNullOrWhiteSpace(TeamCity.Text)))
+            {
+                Notify.Text = "Please fill in all data entries";
+                Notify.TextColor = Color.Red;
+                TeamName.Text = null;
+                TeamCity.Text = null;
+              //  Position.Text = null;
             }
-         
-            //TeamName.Text
-            await TVM.AddTeamAsync(TeamCity.Text, TeamName.Text);
-            TVM.LoadItemsCommand.Execute(null);
-            Button ClickedButton = (Button)sender;
-            
-            //var position = Team.CursorPosition;
-            //if(Team.Text == null)
-            //{
-            //    ClickedButton.Text = "No team entered";
-            //}
-            //add = 1;
+            else
+            {
+                try
+                {
+                    Team.TeamName = TeamName.Text.ToString();
+                    Team.LocationCity = TeamCity.Text.ToString();
+                }
+                catch
+                {
+
+                }
+
+                //TeamName.Text
+                await TVM.AddTeamAsync(TeamCity.Text, TeamName.Text);
+                TVM.LoadItemsCommand.Execute(null);
+                Button ClickedButton = (Button)sender;
+
+                //var position = Team.CursorPosition;
+                //if(Team.Text == null)
+                //{
+                //    ClickedButton.Text = "No team entered";
+                //}
+                //add = 1;
+            }
         }
         private void AddItemsToUi(object sender, EventArgs e)
         {
