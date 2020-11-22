@@ -110,7 +110,6 @@ namespace BATTS.Views
             await Navigation.PushModalAsync(new NavigationPage(new Players(teamID,sessionID)));
         }
 
-
         protected override void OnAppearing()
         {
             base.OnAppearing();

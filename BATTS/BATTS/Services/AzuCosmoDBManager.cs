@@ -19,7 +19,7 @@ namespace BATTS.Services
     public class AzuCosmoDBManager
     {
         static DocumentClient docClient = null;
-        static DocumentClient docClient2 = null;
+        //static DocumentClient docClient = null;
         static DocumentClient docClient3 = null;
         static DocumentClient docClient4 = null;
 
@@ -53,6 +53,25 @@ namespace BATTS.Services
                 await docClient.CreateDocumentCollectionIfNotExistsAsync(
                     UriFactory.CreateDatabaseUri(databaseName),
                     new DocumentCollection { Id = collectionName },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+
+                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databaseName),
+                    new DocumentCollection { Id = collectionTeam },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databaseName),
+                    new DocumentCollection { Id = collectionPlayers },
+                    new RequestOptions { OfferThroughput = 400 }
+                );
+
+                await docClient.CreateDocumentCollectionIfNotExistsAsync(
+                    UriFactory.CreateDatabaseUri(databaseName),
+                    new DocumentCollection { Id = collectionGames },
                     new RequestOptions { OfferThroughput = 400 }
                 );
 
@@ -146,39 +165,7 @@ namespace BATTS.Services
 
         #endregion
 
-        static async Task<bool> InitializeTeams()
-        {
-            if (docClient2 != null)
-                return true;
-
-            try
-            {
-                docClient2 = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
-
-                // Create the database - this can also be done through the portal
-                await docClient2.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseTeam });
-
-                // Create the collection - make sure to specify the RUs - has pricing implications
-                // This can also be done through the portal
-
-                await docClient2.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databaseTeam),
-                    new DocumentCollection { Id = collectionTeam },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-
-                docClient2 = null;
-
-                return false;
-            }
-
-            return true;
-        }
+       
 
         #region Team Data Models
         // <GetUserData>
@@ -191,10 +178,10 @@ namespace BATTS.Services
         {
             var items = new List<TeamDataModel>();
 
-            if (!await InitializeTeams())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient2.CreateDocumentQuery<TeamDataModel>(
+            var itemQuery = docClient.CreateDocumentQuery<TeamDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.ActiveTeam == true)
@@ -217,10 +204,10 @@ namespace BATTS.Services
         {
             var items = new List<TeamDataModel>();
 
-            if (!await InitializeTeams())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient2.CreateDocumentQuery<TeamDataModel>(
+            var itemQuery = docClient.CreateDocumentQuery<TeamDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.OwnerID == ownerID)
@@ -242,10 +229,10 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task InsertTeamData(TeamDataModel item)
         {
-            if (!await InitializeTeams())
+            if (!await Initialize())
                 return;
 
-            await docClient2.CreateDocumentAsync(
+            await docClient.CreateDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
                 item);
         }
@@ -257,11 +244,11 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task DeleteTeamData(TeamDataModel item)
         {
-            if (!await InitializeTeams())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
-            await docClient2.DeleteDocumentAsync(docUri);
+            await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
 
@@ -271,11 +258,11 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task UpdateTeamData(TeamDataModel item)
         {
-            if (!await InitializeTeams())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
-            await docClient2.ReplaceDocumentAsync(docUri, item);
+            await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
