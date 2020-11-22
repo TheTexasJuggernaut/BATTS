@@ -99,8 +99,8 @@ namespace BATTS.Views
 
                 }
             }
-            // bool playerexist = await PVM.GetPlayerIDAsync();
-            
+
+
 
 
         }

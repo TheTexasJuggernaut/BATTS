@@ -11,8 +11,6 @@ using BATTS.Models;
 using BATTS.Views;
 using BATTS.ViewModels;
 using BATTS.Services;
-
-
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,10 +26,10 @@ namespace BATTS.Views
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
         //public Teams() { InitializeComponent(); }
 
-        public Teams (string SessionID)
-		{
+        public Teams(string SessionID)
+        {
             InitializeComponent();
-            sessionID = SessionID;            
+            sessionID = SessionID;
             BindingContext = TVM = new TeamsViewModel(sessionID);
             TVM.Title = "Teams Page";
 
@@ -43,7 +41,7 @@ namespace BATTS.Views
             if (team == null)
                 return;
 
-          await Navigation.PushAsync(new Players(team.Id,sessionID));
+            await Navigation.PushAsync(new Players(team.Id, sessionID));
 
             // Manually deselect item.
             //ItemsListView.SelectedItem = null;
@@ -63,7 +61,7 @@ namespace BATTS.Views
                 Notify.TextColor = Color.Red;
                 TeamName.Text = null;
                 TeamCity.Text = null;
-              //  Position.Text = null;
+               
             }
             else
             {
@@ -77,183 +75,38 @@ namespace BATTS.Views
 
                 }
 
-                //TeamName.Text
+           
                 await TVM.AddTeamAsync(TeamCity.Text, TeamName.Text);
                 TVM.LoadItemsCommand.Execute(null);
                 Button ClickedButton = (Button)sender;
 
-                //var position = Team.CursorPosition;
-                //if(Team.Text == null)
-                //{
-                //    ClickedButton.Text = "No team entered";
-                //}
-                //add = 1;
+              
             }
         }
         private void AddItemsToUi(object sender, EventArgs e)
-        {
-            // var TeamsDB = await TVM.GetTeamAsync();
+        {           
             TVM.LoadItemsCommand.Execute(null);
 
             //Logic for teams from database
             var Teams = new List<string>();
-            //Teams.Add(Team.Text);
-            //Teams.Add("New York Jags");
-           // Teams.Add("London Robins");
-           // Teams.Add("Mumbai Wolves");
-          //  Teams.Add("Chicago Bears");
-
-            //if(remove == 0 && add == 0)
-            //{
-            //    if (Team.Text == null)
-            //    {
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if (remove == 1 && add == 0)
-            //{
-            //    if (Team.Text == null)
-            //    {
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (var item in Teams)
-            //        {
-            //            if (Team.Text == item)
-            //            {
-            //                Teams.Remove(Team.Text);
-            //            }
-            //        }
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if (remove == 0 && add == 1)
-            //{
-            //    if (Team.Text == null)
-            //    {
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Teams.Add(Team.Text);
-            //        foreach (var item in Teams)
-            //        {
-
-            //            Button CurrentButton = new Button()
-            //            {
-            //                Text = item,
-            //                TextColor = Color.White,
-            //                StyleId = item
-
-            //            };
-
-            //            CurrentButton.Clicked += MyButton_Clicked;
-            //            TeamViews.Children.Add(CurrentButton);
-
-            //        }
-            //    }
-            //}
-            //if(remove == 1 && add == 1)
-            //{
-            //    remove = 0;
-            //    add = 0;
-            //}
-            
-            
-
+           
         }
-
         public async void RemoveTeam(object sender, EventArgs e)
         {
             try
             {
                 // TeamName.Text;
-               string teamid = await TVM.GetTeamIDAsync(TeamName.Text, TeamCity.Text);
-                if(teamid == "NTE")
+                string teamid = await TVM.GetTeamIDAsync(TeamName.Text, TeamCity.Text);
+                if (teamid == "NTE")
                 {
                     Notify.Text = "No Team Found";
                 }
-                if(teamid == "NCE")
+                if (teamid == "NCE")
                 {
                     Notify.Text = "No City Found for Team";
                 }
                 bool worked = await TVM.DeleteTeamAsync(teamid);
-              
+
 
             }
             catch
@@ -261,22 +114,16 @@ namespace BATTS.Views
                 Notify.Text = "Failed to remove team, try again";
             }
             TVM.LoadItemsCommand.Execute(null);
-            //Button ClickedButton = (Button)sender;
-            //var position = Team.CursorPosition;
-            //if (Team.Text == null)
-            //{
-            //    ClickedButton.Text = "No team entered";
-            //}
-            //remove = 1;
+            
         }
-       
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
             if (TVM.TeamDB.Count == 0)
             {
-                //TVM.RefreshCommand.Execute(null);
+
                 TVM.LoadItemsCommand.Execute(null);
             }
             ItemsListView.HeightRequest = 10;

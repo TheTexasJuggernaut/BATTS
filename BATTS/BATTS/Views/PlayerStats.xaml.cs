@@ -26,7 +26,7 @@ namespace BATTS.Views
         //PlayersViewModel PVM;
         public string sessionID, playerID, teamID;
         GameModel Game = new GameModel();
-       
+
 
         public PlayerStats(string teamid, string playerid, string SessionID)
         {
@@ -42,13 +42,11 @@ namespace BATTS.Views
             bool check = true;
             if (check == (String.IsNullOrWhiteSpace(GameID.Text)) || (String.IsNullOrWhiteSpace(AttemptedHits.Text)) || (String.IsNullOrWhiteSpace(Hits.Text)))
             {
-                //Notify.Text = "Please fill in all data entries";
-                // notify.TextColor = Color.Red;
+
                 GameID.Text = null;
                 AttemptedHits.Text = null;
                 Hits.Text = null;
-                //lastname.Text = null;
-                // Position.Text = null;
+
             }
             else
             {
@@ -62,8 +60,6 @@ namespace BATTS.Views
                     Game.Runs = Int32.Parse(Runs.Text);
                     Game.Strikes = Int32.Parse(Strikes.Text);
                     Double BattingAVG = Convert.ToDouble(Game.Hits / Game.AttemptedHits);
-
-
 
                 }
                 catch
@@ -99,15 +95,14 @@ namespace BATTS.Views
                     notify.TextColor = Color.Red;
                     notify.Text = "Data Failed";
                 }
-                //GVM.LoadItemsCommand.Execute(null);
-                //await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
+
                 GVM.LoadItemsCommand.Execute(null);
             }
         }
 
         async public void GoBack(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new Players(teamID,sessionID)));
+            await Navigation.PushModalAsync(new NavigationPage(new Players(teamID, sessionID)));
         }
 
         protected override void OnAppearing()
@@ -116,10 +111,10 @@ namespace BATTS.Views
 
             if (GVM.GameDB.Count == 0)
             {
-                //TVM.RefreshCommand.Execute(null);
+
                 GVM.LoadItemsCommand.Execute(null);
             }
-           
+
         }
     }
 }

@@ -18,16 +18,16 @@ using System.Windows.Input;
 
 namespace BATTS.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 
     public partial class Players : ContentPage
-	{
+    {
         PlayersViewModel PVM;
         public string sessionID, teamID;
-        PlayerDataModel Player= new PlayerDataModel();
-       
-        public Players (string TeamId, string SessionID)
-		{
+        PlayerDataModel Player = new PlayerDataModel();
+
+        public Players(string TeamId, string SessionID)
+        {
             InitializeComponent();
             sessionID = SessionID;
             teamID = TeamId;
@@ -41,10 +41,9 @@ namespace BATTS.Views
             if (player == null)
                 return;
 
-            await Navigation.PushAsync(new PlayerStats(teamID,player.Id, sessionID));
+            await Navigation.PushAsync(new PlayerStats(teamID, player.Id, sessionID));
 
-            // Manually deselect item.
-            //ItemsListView.SelectedItem = null;
+
         }
         async public void GoBack(object sender, EventArgs e)
         {
@@ -55,20 +54,18 @@ namespace BATTS.Views
             PVM.LoadItemsCommand.Execute(null);
             //await PVM.CreateNewPlayerAsync();
             var players = new List<string>();
-           
 
 
-        }        
+
+        }
         public async void AddPlayer(object sender, EventArgs e)
         {
             bool check = true;
             if (check == (String.IsNullOrWhiteSpace(PlayerID.Text)))
             {
-                //Notify.Text = "Please fill in all data entries";
-                // notify.TextColor = Color.Red;
+
                 PlayerID.Text = null;
-                //lastname.Text = null;
-                // Position.Text = null;
+
             }
             else
             {
@@ -94,16 +91,16 @@ namespace BATTS.Views
 
             try
             {
-                // TeamName.Text;
+
                 string playerid = PlayerID.Text.ToString();
                 string playerretrun = await PVM.GetPlayerIDAsync(teamID);
                 if (playerid == "NTE")
                 {
-                   // Notify.Text = "No Team Found";
+                    // Notify.Text = "No Team Found";
                 }
                 if (playerid == "NCE")
                 {
-                   // Notify.Text = "No City Found for Team";
+                    // Notify.Text = "No City Found for Team";
                 }
                 bool worked = await PVM.RemovePlayerFromTeamAsync(playerid);
                 PVM.LoadItemsCommand.Execute(null);
@@ -114,12 +111,7 @@ namespace BATTS.Views
                 //Notify.Text = "Failed to remove team, try again";
             }
             Button ClickedButton = (Button)sender;
-            //var position = Player.CursorPosition;
-            //if (Player.Text.Insert(position, "player") == null)
-            //{
-            //    ClickedButton.Text = "No player entered";
-            //}
-            //remove = 1;
+
         }
         protected override void OnAppearing()
         {
@@ -127,7 +119,7 @@ namespace BATTS.Views
 
             if (PVM.PlayerDB.Count == 0)
             {
-                //TVM.RefreshCommand.Execute(null);
+                
                 PVM.LoadItemsCommand.Execute(null);
             }
         }

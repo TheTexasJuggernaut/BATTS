@@ -19,21 +19,12 @@ namespace BATTS.Services
     public class AzuCosmoDBManager
     {
         static DocumentClient docClient = null;
-       // static DocumentClient docClient = null;
-        //static DocumentClient docClient = null;
-        //static DocumentClient docClient = null;
-
-
+     
         static readonly string databaseName = "UserRegistry";
+        //Various Collections for CosmoDB
         static readonly string collectionName = "UserData";
-
-        static readonly string databaseTeam = "UserRegistry";
-        static readonly string collectionTeam = "TeamsData";
-
-        static readonly string databasePlayers = "UserRegistry";
-        static readonly string collectionPlayers= "PlayersData";
-
-        static readonly string databaseGames = "UserRegistry";
+        static readonly string collectionTeam = "TeamsData";  
+        static readonly string collectionPlayers = "PlayersData";
         static readonly string collectionGames = "GameData";
 
         static async Task<bool> Initialize()
@@ -88,7 +79,6 @@ namespace BATTS.Services
 
         #region User Data Models
         // <GetUserData>
-
         /// <summary>
         /// Pulls the data from the User Data Model databse and stores into a list
         /// </summary>
@@ -103,7 +93,7 @@ namespace BATTS.Services
             var itemQuery = docClient.CreateDocumentQuery<UserDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
-                .Where(item => item.ActiveUser == true )
+                .Where(item => item.ActiveUser == true)
                 .AsDocumentQuery();
 
             while (itemQuery.HasMoreResults)
@@ -115,8 +105,6 @@ namespace BATTS.Services
 
             return items;
         }
-
-
         // <InsertUserData>        
         /// <summary> 
         /// </summary>
@@ -178,7 +166,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<TeamDataModel>(
-                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionTeam),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.ActiveTeam == true)
                 .AsDocumentQuery();
@@ -204,7 +192,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<TeamDataModel>(
-                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionTeam),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.OwnerID == ownerID)
                 .AsDocumentQuery();
@@ -229,7 +217,7 @@ namespace BATTS.Services
                 return;
 
             await docClient.CreateDocumentAsync(
-                UriFactory.CreateDocumentCollectionUri(databaseTeam, collectionTeam),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionTeam),
                 item);
         }
         // </InsertToDoItem>  
@@ -243,7 +231,7 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionTeam, item.Id);
             await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
@@ -257,15 +245,13 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databaseTeam, collectionTeam, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionTeam, item.Id);
             await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
 
         #endregion
-
-       
 
         #region Player Data Models
         // <GetUserData>
@@ -282,7 +268,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<PlayerDataModel>(
-                UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionPlayers),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.TeamID == TeamID)
                 .AsDocumentQuery();
@@ -310,7 +296,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<PlayerDataModel>(
-                UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionPlayers),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.Id == PlayerID)
                 .AsDocumentQuery();
@@ -336,7 +322,7 @@ namespace BATTS.Services
                 return;
 
             await docClient.CreateDocumentAsync(
-                UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionPlayers),
                 item);
         }
         // </InsertToDoItem>  
@@ -350,7 +336,7 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionPlayers, item.Id);
             await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
@@ -364,15 +350,13 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionPlayers, item.Id);
             await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
 
         #endregion
-
-       
 
         #region Game Models
         // <GetUserData>
@@ -389,7 +373,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<GameModel>(
-                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionGames),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.GameId == GameID)
                 .AsDocumentQuery();
@@ -416,7 +400,7 @@ namespace BATTS.Services
                 return items;
 
             var itemQuery = docClient.CreateDocumentQuery<GameModel>(
-                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionGames),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.PlayerIDs == PlayerID)
                 .AsDocumentQuery();
@@ -444,7 +428,7 @@ namespace BATTS.Services
                 return;
 
             await docClient.CreateDocumentAsync(
-                UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
+                UriFactory.CreateDocumentCollectionUri(databaseName, collectionGames),
                 item);
         }
         // </InsertToDoItem>  
@@ -458,7 +442,7 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionGames, item.Id);
             await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
@@ -472,7 +456,7 @@ namespace BATTS.Services
             if (!await Initialize())
                 return;
 
-            var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
+            var docUri = UriFactory.CreateDocumentUri(databaseName, collectionGames, item.Id);
             await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
@@ -481,6 +465,6 @@ namespace BATTS.Services
         #endregion
 
 
-       
+
     }
 }

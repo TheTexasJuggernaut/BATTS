@@ -51,7 +51,7 @@ namespace BATTS.Views
                 UserRegister.LastName = lastname.Text.ToString();
                 UserRegister.Email = email.Text.ToString();
                 IsValidEmail =RVM.IsValidEmail(UserRegister.Email);
-                // UserRegister.Role = role.Text.ToString();
+               
                 UserRegister.Role = rolepicker.SelectedItem.ToString();
                 UserRegister.Password = password.Text.ToString();
                 UserRegister.ActiveUser = true;

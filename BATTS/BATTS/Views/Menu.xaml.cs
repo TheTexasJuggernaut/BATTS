@@ -12,20 +12,18 @@ namespace BATTS.Views
 
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Menu : ContentPage
+    public partial class Menu : ContentPage
     {
         string sessionID;
-        public Menu (string SessionID)
-		{
-			InitializeComponent ();
+        public Menu(string SessionID)
+        {
+            InitializeComponent();
             sessionID = SessionID;
         }
         async public void ViewTeams(object sender, EventArgs e)
         {
 
-            // var buttonAddTeam = FindViewById<Button>(Resource.Id.AddTeam);
 
-            // var buttonTeam = FindViewById<Button>(Resource.Id.btviewteams1);
             await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
 
         }
@@ -37,7 +35,7 @@ namespace BATTS.Views
         }
         async public void CreatePlayer(object sender, EventArgs e)
         {
-            
+
             await Navigation.PushModalAsync(new NavigationPage(new PlayerInfo(sessionID)));
         }
         async public void GoBack(object sender, EventArgs e)
@@ -45,5 +43,5 @@ namespace BATTS.Views
             await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
         }
     }
-    
+
 }
