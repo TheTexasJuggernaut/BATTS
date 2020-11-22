@@ -19,9 +19,9 @@ namespace BATTS.Services
     public class AzuCosmoDBManager
     {
         static DocumentClient docClient = null;
+       // static DocumentClient docClient = null;
         //static DocumentClient docClient = null;
-        static DocumentClient docClient3 = null;
-        static DocumentClient docClient4 = null;
+        //static DocumentClient docClient = null;
 
 
         static readonly string databaseName = "UserRegistry";
@@ -32,6 +32,7 @@ namespace BATTS.Services
 
         static readonly string databasePlayers = "UserRegistry";
         static readonly string collectionPlayers= "PlayersData";
+
         static readonly string databaseGames = "UserRegistry";
         static readonly string collectionGames = "GameData";
 
@@ -56,24 +57,21 @@ namespace BATTS.Services
                     new RequestOptions { OfferThroughput = 400 }
                 );
 
-
                 await docClient.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databaseName),
-                    new DocumentCollection { Id = collectionTeam },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
-
+                   UriFactory.CreateDatabaseUri(databaseName),
+                   new DocumentCollection { Id = collectionTeam },
+                   new RequestOptions { OfferThroughput = 400 }
+               );
                 await docClient.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databaseName),
-                    new DocumentCollection { Id = collectionPlayers },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
-
+                   UriFactory.CreateDatabaseUri(databaseName),
+                   new DocumentCollection { Id = collectionPlayers },
+                   new RequestOptions { OfferThroughput = 400 }
+               );
                 await docClient.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databaseName),
-                    new DocumentCollection { Id = collectionGames },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
+                   UriFactory.CreateDatabaseUri(databaseName),
+                   new DocumentCollection { Id = collectionGames },
+                   new RequestOptions { OfferThroughput = 400 }
+               );
 
             }
             catch (Exception ex)
@@ -163,9 +161,7 @@ namespace BATTS.Services
         // </UpdateToDoItem>  
 
 
-        #endregion
-
-       
+        #endregion       
 
         #region Team Data Models
         // <GetUserData>
@@ -269,39 +265,7 @@ namespace BATTS.Services
 
         #endregion
 
-        static async Task<bool> InitializePlayers()
-        {
-            if (docClient3 != null)
-                return true;
-
-            try
-            {
-                docClient3 = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
-
-                // Create the database - this can also be done through the portal
-                await docClient3.CreateDatabaseIfNotExistsAsync(new Database { Id = databasePlayers });
-
-                // Create the collection - make sure to specify the RUs - has pricing implications
-                // This can also be done through the portal
-
-                await docClient3.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databasePlayers),
-                    new DocumentCollection { Id = collectionPlayers },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-
-                docClient3 = null;
-
-                return false;
-            }
-
-            return true;
-        }
+       
 
         #region Player Data Models
         // <GetUserData>
@@ -314,10 +278,10 @@ namespace BATTS.Services
         {
             var items = new List<PlayerDataModel>();
 
-            if (!await InitializePlayers())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient3.CreateDocumentQuery<PlayerDataModel>(
+            var itemQuery = docClient.CreateDocumentQuery<PlayerDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.TeamID == TeamID)
@@ -342,10 +306,10 @@ namespace BATTS.Services
         {
             var items = new List<PlayerDataModel>();
 
-            if (!await InitializePlayers())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient3.CreateDocumentQuery<PlayerDataModel>(
+            var itemQuery = docClient.CreateDocumentQuery<PlayerDataModel>(
                 UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.Id == PlayerID)
@@ -368,10 +332,10 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task InsertPlayerData(PlayerDataModel item)
         {
-            if (!await InitializePlayers())
+            if (!await Initialize())
                 return;
 
-            await docClient3.CreateDocumentAsync(
+            await docClient.CreateDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(databasePlayers, collectionPlayers),
                 item);
         }
@@ -383,11 +347,11 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task DeletePlayerData(PlayerDataModel item)
         {
-            if (!await InitializePlayers())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
-            await docClient3.DeleteDocumentAsync(docUri);
+            await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
 
@@ -397,50 +361,18 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task UpdatePlayerData(PlayerDataModel item)
         {
-            if (!await InitializePlayers())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databasePlayers, collectionPlayers, item.Id);
-            await docClient3.ReplaceDocumentAsync(docUri, item);
+            await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
 
         #endregion
 
-        static async Task<bool> InitializeGames()
-        {
-            if (docClient4 != null)
-                return true;
-
-            try
-            {
-                docClient4 = new DocumentClient(new Uri(APIKeys.CosmosEndpointUrl), APIKeys.CosmosAuthKey);
-
-                // Create the database - this can also be done through the portal
-                await docClient4.CreateDatabaseIfNotExistsAsync(new Database { Id = databaseGames });
-
-                // Create the collection - make sure to specify the RUs - has pricing implications
-                // This can also be done through the portal
-
-                await docClient4.CreateDocumentCollectionIfNotExistsAsync(
-                    UriFactory.CreateDatabaseUri(databaseGames),
-                    new DocumentCollection { Id = collectionGames },
-                    new RequestOptions { OfferThroughput = 400 }
-                );
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-
-                docClient4 = null;
-
-                return false;
-            }
-
-            return true;
-        }
+       
 
         #region Game Models
         // <GetUserData>
@@ -453,10 +385,10 @@ namespace BATTS.Services
         {
             var items = new List<GameModel>();
 
-            if (!await InitializeGames())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient4.CreateDocumentQuery<GameModel>(
+            var itemQuery = docClient.CreateDocumentQuery<GameModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.GameId == GameID)
@@ -480,10 +412,10 @@ namespace BATTS.Services
         {
             var items = new List<GameModel>();
 
-            if (!await InitializeGames())
+            if (!await Initialize())
                 return items;
 
-            var itemQuery = docClient4.CreateDocumentQuery<GameModel>(
+            var itemQuery = docClient.CreateDocumentQuery<GameModel>(
                 UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
                 new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
                 .Where(item => item.PlayerIDs == PlayerID)
@@ -508,10 +440,10 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task InsertGameData(GameModel item)
         {
-            if (!await InitializeGames())
+            if (!await Initialize())
                 return;
 
-            await docClient4.CreateDocumentAsync(
+            await docClient.CreateDocumentAsync(
                 UriFactory.CreateDocumentCollectionUri(databaseGames, collectionGames),
                 item);
         }
@@ -523,11 +455,11 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task DeleteGameData(GameModel item)
         {
-            if (!await InitializeGames())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
-            await docClient4.DeleteDocumentAsync(docUri);
+            await docClient.DeleteDocumentAsync(docUri);
         }
         // </DeleteToDoItem>  
 
@@ -537,11 +469,11 @@ namespace BATTS.Services
         /// <returns></returns>
         public async static Task UpdateGameData(GameModel item)
         {
-            if (!await InitializeGames())
+            if (!await Initialize())
                 return;
 
             var docUri = UriFactory.CreateDocumentUri(databaseGames, collectionGames, item.Id);
-            await docClient4.ReplaceDocumentAsync(docUri, item);
+            await docClient.ReplaceDocumentAsync(docUri, item);
         }
         // </UpdateToDoItem>  
 
