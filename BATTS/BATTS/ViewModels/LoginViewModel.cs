@@ -152,9 +152,7 @@ namespace BATTS.ViewModels
                 IsBusy = false;
             }
         }
-
-
-
+               
     }
 }
 
