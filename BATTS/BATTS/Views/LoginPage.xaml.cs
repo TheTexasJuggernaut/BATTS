@@ -22,8 +22,8 @@ namespace BATTS.Views
     public partial class LoginPage : ContentPage
     {
         LoginViewModel LVM;
-        private bool IsVerified, VerifyResponse;
-        private string sessionID, SessionIDResponse;
+        private bool isVerified, verifyResponse;
+        private string sessionID, sessionIDResponse;
         public LoginPage()
         {
             InitializeComponent();
@@ -32,10 +32,17 @@ namespace BATTS.Views
             LVM.Title = "Login Page";
         }
 
-
-        public void UpdateNotification(string StatusInput, int StatusType)
+        // <UpdateNotification>
+        /// <summary>
+        /// Takes two inputs (string text you want to send & the integer control) and controls the XAML Notify Text Output
+        /// 1 : Caution
+        /// 2 : Warning
+        /// 3 : Good Input 
+        /// </summary>
+        /// <returns></returns>
+        public void updateNotification(string statusInput, int statusType)
         {
-            switch (StatusType)
+            switch (statusType)
             {
                 case 1:
                     notify.TextColor = Color.Orange;
@@ -49,53 +56,65 @@ namespace BATTS.Views
 
             }
             
-            notify.Text = StatusInput;
+            notify.Text = statusInput;
+        }
+
+        public static bool inputValid(string input)
+        {
+            return String.IsNullOrWhiteSpace(input);
         }
        
-        async public void NavigationTo(string IDInput, string page)
+        async public void navigationTo(string iDInput, string page)
         {
             if (page == "MENU")
             {
                 // 11/1/20 : S.A. Update this code to utilize the user type to change what they have access to prior to loggin to the application
-                await Navigation.PushModalAsync(new NavigationPage(new Menu(sessionID)));
+                await Navigation.PushModalAsync(new NavigationPage(new Menu(iDInput)));
             }
             if(page == "REGISTER")
             {
                 await Navigation.PushModalAsync(new NavigationPage(new Register()));
             }
         }
-        async public Task<string> GetUserID()
+
+        async public Task<string> getUserID()
         {
             sessionID = await LVM.GetUserIDAsync(email.Text);
             return sessionID;
         }
 
-        async public Task<bool> VerifyEmail()
+        async public Task<bool> verifyEmail()
         {
-            IsVerified = await LVM.LoginCheckAsync(email.Text, pwd.Text);
-            return IsVerified;
+            isVerified = await LVM.LoginCheckAsync(email.Text, pwd.Text);
+            return isVerified;
         }
 
-        async public void DoLogin(object sender, EventArgs e)
+        async public void doLogin(object sender, EventArgs e)
         {
-
-            VerifyResponse = await VerifyEmail();
-
-            if (VerifyResponse)
+            if (!inputValid(email.Text) && !inputValid(pwd.Text))
             {
-                SessionIDResponse = await GetUserID();
-                NavigationTo(SessionIDResponse,"MENU");
+                verifyResponse = await verifyEmail();
+
+                if (verifyResponse)
+                {
+                    sessionIDResponse = await getUserID();
+                    navigationTo(sessionIDResponse, "MENU");
+                }
+                else
+                {
+                    updateNotification("Wrong Credentials, Please try again. If new to BATSS please Register", 1);
+                }
             }
             else
             {
-                UpdateNotification("Wrong Credentials, Please try again. If new to BATSS please Register", 1);
+                updateNotification("Please enter a valid email or password", 2);
             }
 
         }
 
-        public void DoRegister(object sender, EventArgs e)
+        public void doRegister(object sender, EventArgs e)
         {
-           NavigationTo(SessionIDResponse, "REGISTER");           
+           navigationTo(sessionIDResponse, "REGISTER");           
 
         }
 
