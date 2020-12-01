@@ -4,10 +4,10 @@
              x:Class="BATTS.Views.Menu">
     <ContentPage.Content>
         <StackLayout>
-                <Button Text="Tutorial" Clicked="DoTutorial" />
-                <Button Text = "View Teams" Clicked="ViewTeams"  />
-                <Button Text = "Create Player" Clicked="CreatePlayer"  />
-                <Button Text = "Go Back" Clicked="GoBack"/>
+                <Button Text="Tutorial" Clicked="doTutorial" />
+                <Button Text = "View Teams" Clicked="viewTeams"  />
+                <Button Text = "Create Player" Clicked="createPlayer"  />
+                <Button Text = "Go Back" Clicked="goBack"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

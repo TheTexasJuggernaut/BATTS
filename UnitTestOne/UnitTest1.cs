@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BATTS.ViewModels;
+using BATTS.Views;
 
 namespace UnitTestOne
 {
@@ -43,7 +44,7 @@ namespace UnitTestOne
 
         }
 
-
+       
 
 
     }

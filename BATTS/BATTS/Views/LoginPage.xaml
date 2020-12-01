@@ -52,8 +52,8 @@
 
             </StackLayout> -->
             <StackLayout Grid.Row="1">
-                <Button Grid.Row="1" Text="Login" Clicked="DoLogin" />
-            <Button Grid.Row="2" Text = "Register New Account" Clicked="DoRegister" />
+                <Button Grid.Row="1" Text="Login" Clicked="doLogin" />
+            <Button Grid.Row="2" Text = "Register New Account" Clicked="doRegister" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

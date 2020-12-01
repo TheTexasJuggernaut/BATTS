@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,34 +15,70 @@ namespace BATTS.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Menu : ContentPage
     {
+        #region Declarations
         string sessionID;
-        public Menu(string SessionID)
+        #endregion
+
+        public Menu(string sessionIDs)
         {
             InitializeComponent();
-            sessionID = SessionID;
+            sessionID = sessionIDs;
         }
-        async public void ViewTeams(object sender, EventArgs e)
+
+        #region Functions
+        /// <summary>
+        /// Controls the navigation and page you want to travel too and takes session ID as well
+        /// </summary>
+        /// <returns></returns>
+        async public void navigationTo(string iDInput, string page)
+        {
+            if (page == "TEAMS")
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
+            }
+            else if (page == "TUTORIALS")
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new TutorialPage(sessionID)));
+            }
+            else if (page == "PLAYERSINFO")
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new PlayerInfo(sessionID)));
+            }
+            else if (page == "LOGIN")
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            }
+            else
+            {
+                Debug.WriteLine("No Valid Inputs");
+            }
+        }
+        #endregion
+
+        #region Event Trigger Functions
+        public void viewTeams(object sender, EventArgs e)
+        {
+            navigationTo(sessionID, "TEAMS");          
+
+        }
+
+        public void doTutorial(object sender, EventArgs e)
+        {
+            navigationTo(sessionID, "TUTORIALS");
+        }
+
+        public void createPlayer(object sender, EventArgs e)
         {
 
+            navigationTo(sessionID, "PLAYERSINFO");
+        }
 
-            await Navigation.PushModalAsync(new NavigationPage(new Teams(sessionID)));
+        public void goBack(object sender, EventArgs e)
+        {
+            navigationTo(sessionID, "LOGIN");
+        }
+        #endregion
 
-        }
-        async public void DoTutorial(object sender, EventArgs e)
-        {
-            // Toast.MakeText(this, "Please View the manual for a a tutorial on the BATSS App", ToastLength.Long).Show();
-            //SetContentView(Resource.Layout.Tutorial);
-            await Navigation.PushModalAsync(new NavigationPage(new TutorialPage(sessionID)));
-        }
-        async public void CreatePlayer(object sender, EventArgs e)
-        {
-
-            await Navigation.PushModalAsync(new NavigationPage(new PlayerInfo(sessionID)));
-        }
-        async public void GoBack(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
-        }
     }
 
 }

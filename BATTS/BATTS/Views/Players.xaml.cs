@@ -15,6 +15,7 @@ using BATTS.Services;
 
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace BATTS.Views
 {
@@ -22,9 +23,12 @@ namespace BATTS.Views
 
     public partial class Players : ContentPage
     {
+        #region Declarations
         PlayersViewModel PVM;
         public string sessionID, teamID;
-        PlayerDataModel Player = new PlayerDataModel();
+        PlayerDataModel player = new PlayerDataModel();
+        #endregion
+
 
         public Players(string TeamId, string SessionID)
         {
@@ -35,6 +39,8 @@ namespace BATTS.Views
             PVM.Title = "Teams Page";
 
         }
+
+        #region Event Trigger Functions
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             var player = args.SelectedItem as PlayerDataModel;
@@ -63,27 +69,16 @@ namespace BATTS.Views
             bool check = true;
             if (check == (String.IsNullOrWhiteSpace(PlayerID.Text)))
             {
-
                 PlayerID.Text = null;
-
             }
             else
             {
-                try
-                {
-                    Player.Id = PlayerID.Text.ToString();
 
-                }
-                catch
-                {
-
-                }
-
-                await PVM.AddPlayerToTeamAsync(teamID, Player.Id);
+                player.Id = PlayerID.Text.ToString();
+                await PVM.AddPlayerToTeamAsync(teamID, player.Id);
                 PVM.LoadItemsCommand.Execute(null);
                 Button ClickedButton = (Button)sender;
-                // var position = Player.CursorPosition;
-                //  add = 1;
+
             }
         }
         public async void RemovePlayer(object sender, EventArgs e)
@@ -91,28 +86,34 @@ namespace BATTS.Views
 
             try
             {
-
                 string playerid = PlayerID.Text.ToString();
                 string playerretrun = await PVM.GetPlayerIDAsync(teamID);
-                if (playerid == "NTE")
-                {
-                    // Notify.Text = "No Team Found";
-                }
-                if (playerid == "NCE")
-                {
-                    // Notify.Text = "No City Found for Team";
-                }
+                //if (playerid == "NTE")
+                //{
+                //    // Notify.Text = "No Team Found";
+                //}
+                //else if (playerid == "NCE")
+                //{
+                //    // Notify.Text = "No City Found for Team";
+                //}
+                //else
+                //{
+
+                //}
                 bool worked = await PVM.RemovePlayerFromTeamAsync(playerid);
                 PVM.LoadItemsCommand.Execute(null);
 
             }
             catch
             {
+                Debug.WriteLine("Remove failed");
                 //Notify.Text = "Failed to remove team, try again";
             }
             Button ClickedButton = (Button)sender;
 
         }
+        #endregion
+
         protected override void OnAppearing()
         {
             base.OnAppearing();

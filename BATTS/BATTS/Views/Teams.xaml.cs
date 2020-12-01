@@ -13,6 +13,7 @@ using BATTS.ViewModels;
 using BATTS.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace BATTS.Views
 {
@@ -20,10 +21,13 @@ namespace BATTS.Views
     public partial class Teams : ContentPage
 
     {
+        #region Declarations
         TeamsViewModel TVM;
         public string sessionID;
         TeamDataModel Team = new TeamDataModel();
         MainPage RootPage { get => Application.Current.MainPage as MainPage; }
+        #endregion
+
         //public Teams() { InitializeComponent(); }
 
         public Teams(string SessionID)
@@ -35,6 +39,7 @@ namespace BATTS.Views
 
         }
 
+        #region Event Trigger Functions
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             var team = args.SelectedItem as TeamDataModel;
@@ -72,7 +77,7 @@ namespace BATTS.Views
                 }
                 catch
                 {
-
+                    Debug.WriteLine("Error");
                 }
 
            
@@ -116,7 +121,7 @@ namespace BATTS.Views
             TVM.LoadItemsCommand.Execute(null);
             
         }
-
+        #endregion
         protected override void OnAppearing()
         {
             base.OnAppearing();

@@ -11,18 +11,21 @@ using BATTS.Services;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace BATTS.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Register : ContentPage
 	{
+        #region Declarations
         public List<UserDataModel> LoginDBRegister = new List<UserDataModel>();
-
-        public bool IsValidEmail;
         public UserDataModel UserRegister = new UserDataModel();
-
         RegisterViewModel RVM;
+
+        public bool IsValidEmail;       
+        #endregion
+
         public Register ()
 		{
 			InitializeComponent ();
@@ -31,64 +34,124 @@ namespace BATTS.Views
           
         }
 
-        async public void DoRegister(object sender, EventArgs e)
+        #region Functions
+        /// <summary>
+        /// Controls the Notify Text on GUI, 2 inputs String and Int(1: Orange 2: Red 3: Green)
+        /// </summary>
+        /// <returns></returns>
+        public void updateNotification(string statusInput, int statusType)
         {
-
-           
-
-            if (firstname.Text != ""  && firstname.Text != null && firstname.Text != "First Name")
+            switch (statusType)
             {
+                case 1:
+                    notify.TextColor = Color.Orange;
+                    break;
+                case 2:
+                    notify.TextColor = Color.Red;
+                    break;
+                case 3:
+                    notify.TextColor = Color.Green;
+                    break;
+                default:
+                    Debug.WriteLine("Recieved a unnacepted case"); ;
+                    break;
 
             }
-            else
-            {
 
-            }
-            bool emailexist = await RVM.EmailCheckAsync(email.Text);
+            notify.Text = statusInput;
+        }
+
+        /// <summary>
+        /// Checks to see if user entris not a null or blank, returns true if null or blank is found
+        /// </summary>
+        /// <returns></returns>
+        public static bool inputValid(string input)
+        {
+            return String.IsNullOrWhiteSpace(input);
+        }
+
+        /// <summary>
+        /// Pull data from GUI
+        /// </summary>
+        /// <returns></returns>
+        public void inputFromGUI()
+        {
             try
             {
                 UserRegister.FirstName = firstname.Text.ToString();
                 UserRegister.LastName = lastname.Text.ToString();
                 UserRegister.Email = email.Text.ToString();
-                IsValidEmail =RVM.IsValidEmail(UserRegister.Email);
-               
                 UserRegister.Role = rolepicker.SelectedItem.ToString();
                 UserRegister.Password = password.Text.ToString();
                 UserRegister.ActiveUser = true;
+
+
             }
             catch
             {
-
+                Debug.WriteLine("Data Pull Failed");
             }
-            if (IsValidEmail == false)
+        }
+        #endregion
+
+        #region Event Trigger Functions
+        async public void doRegister(object sender, EventArgs e)
+        {
+            if (!inputValid(firstname.Text) && !inputValid(lastname.Text) && !inputValid(email.Text) && !inputValid(password.Text))
             {
-                email.TextColor = Color.Red;
-                notify.TextColor = Color.Red;
-                email.Text = "Email Not Valid";
-                notify.Text = "This email is not a valid email";
-            }
-            else if (emailexist == false) { 
-           await RVM.RegisterNewUserAsync(UserRegister,true);
-                notify.TextColor = Color.Green;
-                email.TextColor = Color.Green;
-                notify.Text = "User now registered go back to login";
 
+                bool emailexist = await RVM.EmailCheckAsync(email.Text);
+
+                try
+                {
+                    inputFromGUI();
+                    IsValidEmail = RVM.IsValidEmail(UserRegister.Email);
+
+                    if (IsValidEmail == false)
+                    {
+                        email.TextColor = Color.Red;
+                        email.Text = "Email Not Valid";
+
+                        updateNotification("This email is not a valid email", 2);
+                    }
+                    else if (emailexist == false)
+                    {
+
+
+                        email.TextColor = Color.Green;
+                        updateNotification("User now registered go back to login", 3);
+
+                        await RVM.RegisterNewUserAsync(UserRegister, true);
+
+                    }
+                    else
+                    {
+                        email.TextColor = Color.Red;
+                        email.Text = "Email Exists";
+                        updateNotification("This email is already registered", 1);
+
+                    }
+                }
+                catch
+                {
+                    updateNotification("A field is empty or null", 2);
+                    Debug.WriteLine("Pull or Email Valid Failed");
+                }
             }
             else
             {
-                email.TextColor = Color.Red;
-                notify.TextColor = Color.Red;
-                email.Text = "Email Exists";
-                notify.Text = "This email is already registered";
-               
+                updateNotification("Entry(s) not valid", 2);
+                Debug.WriteLine("Register Failed");
             }
-           
+
+                                          
+        }
+        async public void goBack(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
 
         }
-        async public void GoBack(object sender, EventArgs e)
-        {           
-             await Navigation.PushModalAsync(new NavigationPage(new LoginPage()));          
-
-        }
+        #endregion
+       
     }
 }
